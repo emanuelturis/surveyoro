@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: ./server
+    volumes:
+      - "./server:/src/server"
+      - /src/server/node_modules
+    ports:
+      - "9000:9000"
+    networks:
+      - surveyrus
+    environment:
+      - NODE_ENV=development
+      - PORT=9000
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=surveyrus_development
+      - POSTGRES_HOST=postgres
+    command: npm run start
+    depends_on:
+      - postgres
+
+  client:
+    build:
+      context: ./client
+    volumes:
+      - "./client:/src/client"
+      - /src/client/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - surveyrus
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    command: npm run start
+    stdin_open: true
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "username"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "surveyrus_development"
+      POSTGRES_HOST: "postgres"
+    networks:
+      - surveyrus
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "emanuel"
+      PGADMIN_DEFAULT_PASSWORD: "!8Ya5H9BfWh4XbZyUG&fveCzbx*XAaKAg6%JCUG@7D5ZKFEMTb"
+    ports:
+      - "55684:80"
+    networks:
+      - surveyrus
+
+networks:
+  surveyrus:

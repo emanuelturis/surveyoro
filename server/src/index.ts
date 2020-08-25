@@ -1,19 +1,19 @@
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
+import schema from "./schema";
+import { Model } from "objection";
+import knex from "./db/knex";
+import { applyMiddleware } from "graphql-middleware";
+import permissions from "./schema/permissions";
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+Model.knex(knex);
 
-const resolvers = {
-  Query: {
-    hello: () => "Hello World!",
+const server = new ApolloServer({
+  schema: applyMiddleware(schema, permissions),
+  context: async ({ req, res }) => {
+    return { req, res };
   },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
+});
 
 const app = express();
 
