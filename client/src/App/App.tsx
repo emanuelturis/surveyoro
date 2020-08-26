@@ -14,8 +14,6 @@ import { gql, useQuery } from "@apollo/client";
 import Login from "../Login";
 import Register from "../Register";
 import { Container } from "react-bootstrap";
-import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
 
 const USER = gql`
   query User {

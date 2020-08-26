@@ -1,19 +1,16 @@
 import { Model } from "objection";
-import { Survey } from "./Survey";
+import { Question } from "./Question";
 import path from "path";
 
-export class User extends Model {
+export class Answer extends Model {
   static get tableName() {
-    return "users";
+    return "answers";
   }
 
   id!: string;
-  firstName!: string;
-  lastName!: string;
-  email!: string;
-  password!: string;
+  questionId!: string;
 
-  surveys!: Survey[];
+  question!: Question;
 
   createdAt!: string;
   updatedAt!: string;
@@ -29,12 +26,12 @@ export class User extends Model {
 
   static get relationMappings() {
     return {
-      surveys: {
-        relation: Model.HasManyRelation,
-        modelClass: path.join(__dirname, "Survey"),
+      question: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: path.join(__dirname, "Question"),
         join: {
-          from: "users.id",
-          to: "surveys.userId",
+          from: "answers.questionId",
+          to: "questions.id",
         },
       },
     };

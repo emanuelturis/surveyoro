@@ -8,6 +8,7 @@ import { MyContext } from "../my-types";
 import { User } from "../db/models/User";
 import bcrypt from "bcrypt";
 import { createToken } from "../utils/auth";
+import { Survey } from "../db/models/Survey";
 
 export const typeDef = gql`
   type User {
@@ -15,6 +16,7 @@ export const typeDef = gql`
     firstName: String!
     lastName: String!
     email: String!
+    surveys: [Survey!]
   }
 
   input RegisterInput {
@@ -34,11 +36,11 @@ export const typeDef = gql`
     token: String!
   }
 
-  type Query {
+  extend type Query {
     user: User!
   }
 
-  type Mutation {
+  extend type Mutation {
     register(input: RegisterInput!): Boolean!
     login(input: LoginInput!): UserWithToken!
   }
@@ -46,8 +48,13 @@ export const typeDef = gql`
 
 export const resolvers = {
   Query: {
-    user: (_: any, __: any, { user }: MyContext): IUser => {
+    user: (_: any, __: any, { user }: MyContext): User => {
       return user;
+    },
+  },
+  User: {
+    surveys: ({ id }: IUser): Promise<Survey[]> => {
+      return Survey.query().where("userId", id);
     },
   },
   Mutation: {

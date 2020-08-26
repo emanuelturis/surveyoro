@@ -11,6 +11,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type IAnswer = {
+  __typename?: 'Answer';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
 export type ILoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -18,8 +24,12 @@ export type ILoginInput = {
 
 export type IMutation = {
   __typename?: 'Mutation';
+  _empty?: Maybe<Scalars['String']>;
   register: Scalars['Boolean'];
   login: IUserWithToken;
+  createSurvey: ISurvey;
+  deleteSurvey: Scalars['Boolean'];
+  updateSurvey: Scalars['Boolean'];
 };
 
 
@@ -32,9 +42,48 @@ export type IMutationLoginArgs = {
   input: ILoginInput;
 };
 
+
+export type IMutationCreateSurveyArgs = {
+  name: Scalars['String'];
+};
+
+
+export type IMutationDeleteSurveyArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type IMutationUpdateSurveyArgs = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  active: Scalars['Boolean'];
+};
+
+export type IPerson = {
+  __typename?: 'Person';
+  id: Scalars['ID'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  answers: Array<IAnswer>;
+};
+
 export type IQuery = {
   __typename?: 'Query';
+  _empty?: Maybe<Scalars['String']>;
   user: IUser;
+  survey: ISurvey;
+};
+
+
+export type IQuerySurveyArgs = {
+  id: Scalars['String'];
+};
+
+export type IQuestion = {
+  __typename?: 'Question';
+  id: Scalars['ID'];
+  answers?: Maybe<Array<IAnswer>>;
 };
 
 export type IRegisterInput = {
@@ -44,12 +93,29 @@ export type IRegisterInput = {
   password: Scalars['String'];
 };
 
+export type ISubmission = {
+  __typename?: 'Submission';
+  id: Scalars['ID'];
+  person: IPerson;
+  question: IQuestion;
+  answer: IAnswer;
+};
+
+export type ISurvey = {
+  __typename?: 'Survey';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  active: Scalars['Boolean'];
+  questions?: Maybe<Array<IQuestion>>;
+};
+
 export type IUser = {
   __typename?: 'User';
   id: Scalars['ID'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   email: Scalars['String'];
+  surveys?: Maybe<Array<ISurvey>>;
 };
 
 export type IUserWithToken = {
@@ -137,36 +203,89 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<IUser>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  Survey: ResolverTypeWrapper<ISurvey>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Question: ResolverTypeWrapper<IQuestion>;
+  Answer: ResolverTypeWrapper<IAnswer>;
   Mutation: ResolverTypeWrapper<{}>;
   RegisterInput: IRegisterInput;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   LoginInput: ILoginInput;
   UserWithToken: ResolverTypeWrapper<IUserWithToken>;
+  Person: ResolverTypeWrapper<IPerson>;
+  Submission: ResolverTypeWrapper<ISubmission>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type IResolversParentTypes = {
   Query: {};
+  String: Scalars['String'];
   User: IUser;
   ID: Scalars['ID'];
-  String: Scalars['String'];
+  Survey: ISurvey;
+  Boolean: Scalars['Boolean'];
+  Question: IQuestion;
+  Answer: IAnswer;
   Mutation: {};
   RegisterInput: IRegisterInput;
-  Boolean: Scalars['Boolean'];
   LoginInput: ILoginInput;
   UserWithToken: IUserWithToken;
+  Person: IPerson;
+  Submission: ISubmission;
+};
+
+export type IAnswerResolvers<ContextType = any, ParentType extends IResolversParentTypes['Answer'] = IResolversParentTypes['Answer']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  text?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
+  _empty?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   register?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationRegisterArgs, 'input'>>;
   login?: Resolver<IResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<IMutationLoginArgs, 'input'>>;
+  createSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationCreateSurveyArgs, 'name'>>;
+  deleteSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteSurveyArgs, 'id'>>;
+  updateSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateSurveyArgs, 'id' | 'name' | 'active'>>;
+};
+
+export type IPersonResolvers<ContextType = any, ParentType extends IResolversParentTypes['Person'] = IResolversParentTypes['Person']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  firstName?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  lastName?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  answers?: Resolver<Array<IResolversTypes['Answer']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
+  _empty?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
+  survey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IQuerySurveyArgs, 'id'>>;
+};
+
+export type IQuestionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Question'] = IResolversParentTypes['Question']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  answers?: Resolver<Maybe<Array<IResolversTypes['Answer']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type ISubmissionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Submission'] = IResolversParentTypes['Submission']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  person?: Resolver<IResolversTypes['Person'], ParentType, ContextType>;
+  question?: Resolver<IResolversTypes['Question'], ParentType, ContextType>;
+  answer?: Resolver<IResolversTypes['Answer'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type ISurveyResolvers<ContextType = any, ParentType extends IResolversParentTypes['Survey'] = IResolversParentTypes['Survey']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  active?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
+  questions?: Resolver<Maybe<Array<IResolversTypes['Question']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type IUserResolvers<ContextType = any, ParentType extends IResolversParentTypes['User'] = IResolversParentTypes['User']> = {
@@ -174,6 +293,7 @@ export type IUserResolvers<ContextType = any, ParentType extends IResolversParen
   firstName?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  surveys?: Resolver<Maybe<Array<IResolversTypes['Survey']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -184,8 +304,13 @@ export type IUserWithTokenResolvers<ContextType = any, ParentType extends IResol
 };
 
 export type IResolvers<ContextType = any> = {
+  Answer?: IAnswerResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
+  Person?: IPersonResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
+  Question?: IQuestionResolvers<ContextType>;
+  Submission?: ISubmissionResolvers<ContextType>;
+  Survey?: ISurveyResolvers<ContextType>;
   User?: IUserResolvers<ContextType>;
   UserWithToken?: IUserWithTokenResolvers<ContextType>;
 };

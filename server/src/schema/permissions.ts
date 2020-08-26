@@ -32,6 +32,11 @@ export default shield(
     Query: {
       user: isAuthenticated,
     },
+    Mutation: {
+      createSurvey: isAuthenticated,
+      deleteSurvey: isAuthenticated,
+      updateSurvey: isAuthenticated,
+    },
   },
   { allowExternalErrors: true }
 );
