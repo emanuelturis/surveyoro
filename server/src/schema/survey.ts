@@ -44,7 +44,7 @@ export const typeDef = gql`
   }
 
   extend type Query {
-    survey(id: String!): Survey!
+    survey(id: ID!): Survey!
   }
 
   extend type Mutation {

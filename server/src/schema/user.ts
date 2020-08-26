@@ -54,7 +54,7 @@ export const resolvers = {
   },
   User: {
     surveys: ({ id }: IUser): Promise<Survey[]> => {
-      return Survey.query().where("userId", id);
+      return Survey.query().where("userId", id).orderBy("createdAt", "desc");
     },
   },
   Mutation: {

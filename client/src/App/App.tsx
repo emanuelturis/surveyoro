@@ -14,6 +14,8 @@ import { gql, useQuery } from "@apollo/client";
 import Login from "../Login";
 import Register from "../Register";
 import { Container } from "react-bootstrap";
+import { css } from "@emotion/core";
+import EditSurvey from "../Surveys/EditSurvey";
 
 const USER = gql`
   query User {
@@ -38,14 +40,21 @@ function App() {
       <div>
         <Router>
           <Header />
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/surveys" component={Surveys} />
-            <Route exact path="/settings" component={Settings} />
-            <Route>
-              <Redirect to="/" />
-            </Route>
-          </Switch>
+          <Container
+            css={css`
+              margin-top: 25px;
+            `}
+          >
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/surveys" component={Surveys} />
+              <Route exact path="/surveys/:id" component={EditSurvey} />
+              <Route exact path="/settings" component={Settings} />
+              <Route>
+                <Redirect to="/" />
+              </Route>
+            </Switch>
+          </Container>
         </Router>
       </div>
     );

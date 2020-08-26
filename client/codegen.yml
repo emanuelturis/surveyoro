@@ -1,0 +1,9 @@
+overwrite: true
+schema: "http://server:9000/graphql"
+generates:
+  src/graphql-types.ts:
+    plugins:
+      - typescript
+    config:
+      voidOptionals: true
+      typesPrefix: I
