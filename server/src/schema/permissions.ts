@@ -42,6 +42,8 @@ export default shield(
       updateQuestion: isAuthenticated,
       updateAnswer: isAuthenticated,
       deleteAnswer: isAuthenticated,
+      reorderQuestions: isAuthenticated,
+      reorderAnswers: isAuthenticated,
     },
   },
   { allowExternalErrors: true }

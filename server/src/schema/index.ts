@@ -12,6 +12,11 @@ const Query = gql`
   type Query {
     _empty: String
   }
+
+  input IndexedId {
+    id: ID!
+    index: Int!
+  }
 `;
 
 const Mutation = gql`

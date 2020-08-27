@@ -2,11 +2,20 @@ import React, { useState } from "react";
 import { IQuestion } from "../graphql-types";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
-import { FaPencilAlt, FaTrash, FaCaretRight } from "react-icons/fa";
-import { useHistory } from "react-router-dom";
-import { Accordion, Button } from "react-bootstrap";
+import {
+  FaPencilAlt,
+  FaTrash,
+  FaCaretRight,
+  FaGripLines,
+} from "react-icons/fa";
+import { ListGroup } from "react-bootstrap";
 import EditableText from "../Shared/EditableText/EditableText";
 import Answers from "./Answers";
+import {
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot,
+} from "react-beautiful-dnd";
 
 interface Props {
   question: IQuestion;
@@ -24,6 +33,7 @@ const UPDATE_QUESTION = gql`
     updateQuestion(id: $id, surveyId: $surveyId, text: $text) {
       id
       text
+      order
     }
   }
 `;
@@ -49,6 +59,7 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
               questions {
                 id
                 text
+                order
               }
             }
           }
@@ -68,6 +79,7 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
               questions {
                 id
                 text
+                order
               }
             }
           }
@@ -90,62 +102,87 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
   });
 
   return (
-    <div>
-      <div className="d-flex justify-content-between">
-        <div className="d-flex align-items-center">
-          <FaCaretRight
-            css={css`
-              margin-bottom: 2px;
-              margin-right: 5px;
-              transform: ${open ? `rotate(90deg)` : `rotate(0deg)`};
-              cursor: pointer;
-              opacity: 0.8;
-              &:hover {
-                opacity: 1;
-              }
-            `}
-            onClick={() => setOpen(!open)}
-          />
-          <EditableText
-            text={question.text}
-            updateText={(text: string) => {
-              updateQuestion({
-                variables: {
-                  id: question.id,
-                  surveyId,
-                  text,
-                },
-              });
-            }}
-          />
-        </div>
-        <div
+    <Draggable
+      key={question.id}
+      draggableId={question.id}
+      index={question.order}
+    >
+      {(provided) => (
+        <ListGroup.Item
+          {...provided.draggableProps}
+          ref={provided.innerRef}
           css={css`
-            svg {
-              font-size: 15px;
-              opacity: 0.8;
-              margin-left: 15px;
-              cursor: pointer;
-              &:hover {
-                opacity: 1;
-              }
-            }
+            border: 1px solid rgba(0, 0, 0, 0.125) !important;
+            margin-top: 10px;
           `}
         >
-          <FaTrash className="text-danger" onClick={() => deleteQuestion()} />
-        </div>
-      </div>
-      {open && (
-        <div>
-          <hr />
-          <Answers
-            answers={question.answers}
-            questionId={question.id}
-            surveyId={surveyId}
-          />
-        </div>
+          <div>
+            <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-center">
+                <FaCaretRight
+                  css={css`
+                    margin-bottom: 2px;
+                    margin-right: 5px;
+                    transform: ${open ? `rotate(90deg)` : `rotate(0deg)`};
+                    cursor: pointer;
+                    opacity: 0.8;
+                    &:hover {
+                      opacity: 1;
+                    }
+                  `}
+                  onClick={() => setOpen(!open)}
+                />
+                <EditableText
+                  text={question.text}
+                  updateText={(text: string) => {
+                    updateQuestion({
+                      variables: {
+                        id: question.id,
+                        surveyId,
+                        text,
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <div
+                css={css`
+                  svg {
+                    font-size: 15px;
+                    opacity: 0.8;
+                    margin-left: 15px;
+                    &:hover {
+                      opacity: 1;
+                    }
+                  }
+                `}
+              >
+                <FaTrash
+                  css={css`
+                    cursor: pointer;
+                  `}
+                  className="text-danger"
+                  onClick={() => deleteQuestion()}
+                />
+                <span {...provided.dragHandleProps}>
+                  <FaGripLines />
+                </span>
+              </div>
+            </div>
+            {open && (
+              <div>
+                <hr />
+                <Answers
+                  answers={question.answers}
+                  questionId={question.id}
+                  surveyId={surveyId}
+                />
+              </div>
+            )}
+          </div>
+        </ListGroup.Item>
       )}
-    </div>
+    </Draggable>
   );
 };
 

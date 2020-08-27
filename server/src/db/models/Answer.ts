@@ -9,6 +9,7 @@ export class Answer extends Model {
 
   id!: string;
   text!: string;
+  order!: number;
   questionId!: string;
 
   question!: Question;

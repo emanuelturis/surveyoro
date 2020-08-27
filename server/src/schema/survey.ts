@@ -23,6 +23,7 @@ export const typeDef = gql`
   type Question {
     id: ID!
     text: String!
+    order: Int!
     answers: [Answer!]!
   }
 
@@ -37,6 +38,7 @@ export const typeDef = gql`
   type Answer {
     id: ID!
     text: String!
+    order: Int!
   }
 
   type Submission {
@@ -65,16 +67,12 @@ export const resolvers = {
   },
   Survey: {
     questions: async ({ id }: ISurvey): Promise<Question[]> => {
-      return Question.query()
-        .where("surveyId", id)
-        .orderBy("createdAt", "desc");
+      return Question.query().where("surveyId", id).orderBy("order", "asc");
     },
   },
   Question: {
     answers: async ({ id }: IQuestion): Promise<Answer[]> => {
-      return Answer.query()
-        .where("questionId", id)
-        .orderBy("createdAt", "desc");
+      return Answer.query().where("questionId", id).orderBy("order", "asc");
     },
   },
   Mutation: {

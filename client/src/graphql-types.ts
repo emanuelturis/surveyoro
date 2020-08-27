@@ -48,6 +48,7 @@ export type IQuestion = {
   __typename?: 'Question';
   id: Scalars['ID'];
   text: Scalars['String'];
+  order: Scalars['Int'];
   answers: Array<IAnswer>;
 };
 
@@ -55,6 +56,7 @@ export type IAnswer = {
   __typename?: 'Answer';
   id: Scalars['ID'];
   text: Scalars['String'];
+  order: Scalars['Int'];
 };
 
 export type IMutation = {
@@ -67,6 +69,11 @@ export type IMutation = {
   updateSurvey: ISurvey;
   createQuestion: IQuestion;
   deleteQuestion: Scalars['Boolean'];
+  updateQuestion: IQuestion;
+  reorderQuestions: Scalars['Boolean'];
+  createAnswer: IAnswer;
+  updateAnswer: IAnswer;
+  deleteAnswer: Scalars['Boolean'];
 };
 
 
@@ -99,11 +106,46 @@ export type IMutationUpdateSurveyArgs = {
 
 export type IMutationCreateQuestionArgs = {
   surveyId: Scalars['ID'];
+  order: Scalars['Int'];
 };
 
 
 export type IMutationDeleteQuestionArgs = {
   id: Scalars['ID'];
+  surveyId: Scalars['ID'];
+};
+
+
+export type IMutationUpdateQuestionArgs = {
+  id: Scalars['ID'];
+  surveyId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+
+export type IMutationReorderQuestionsArgs = {
+  input: IReorderQuestionsInput;
+};
+
+
+export type IMutationCreateAnswerArgs = {
+  questionId: Scalars['ID'];
+  surveyId: Scalars['ID'];
+  order: Scalars['Int'];
+};
+
+
+export type IMutationUpdateAnswerArgs = {
+  id: Scalars['ID'];
+  questionId: Scalars['ID'];
+  surveyId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+
+export type IMutationDeleteAnswerArgs = {
+  id: Scalars['ID'];
+  questionId: Scalars['ID'];
   surveyId: Scalars['ID'];
 };
 
@@ -123,6 +165,18 @@ export type IUserWithToken = {
   __typename?: 'UserWithToken';
   user: IUser;
   token: Scalars['String'];
+};
+
+export type IReorderQuestionsInput = {
+  surveyId: Scalars['ID'];
+  indexedIds: Array<IIndexedId>;
+  startIndex: Scalars['Int'];
+  endIndex: Scalars['Int'];
+};
+
+export type IIndexedId = {
+  id: Scalars['ID'];
+  index: Scalars['Int'];
 };
 
 export type IPerson = {

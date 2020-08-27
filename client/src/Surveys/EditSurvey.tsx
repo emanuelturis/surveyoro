@@ -18,9 +18,11 @@ const SURVEY = gql`
       questions {
         id
         text
+        order
         answers {
           id
           text
+          order
         }
       }
     }

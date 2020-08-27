@@ -3,6 +3,7 @@ import { FaPencilAlt, FaCheck } from "react-icons/fa";
 import { css } from "@emotion/core";
 import { Form } from "react-bootstrap";
 import OnClickOutside from "../OnClickOutside";
+import ContentEditable from "react-contenteditable";
 
 interface Props {
   title: string;
@@ -10,40 +11,50 @@ interface Props {
 }
 
 const EditableTitle: React.FC<Props> = ({ title, updateTitle }) => {
-  const [editable, setEditable] = useState(false);
-  const inputRef = createRef<HTMLHeadingElement>();
-
-  useEffect(() => {
-    if (editable) {
-      inputRef.current!.focus();
-    }
-  }, [editable]);
+  const [disabled, setDisabled] = useState(true);
+  const contentEditable = createRef<HTMLHtmlElement>();
+  const [html, setHtml] = useState(title);
 
   const handleUpdateTitle = () => {
-    setEditable(() => {
-      updateTitle(inputRef.current!.innerText);
-      return false;
+    setDisabled(() => {
+      updateTitle(html);
+      return true;
     });
   };
 
+  useEffect(() => {
+    if (!disabled) {
+      contentEditable.current!.focus();
+    }
+  }, [!disabled]);
+
   return (
-    <OnClickOutside handler={() => handleUpdateTitle()} active={editable}>
+    <OnClickOutside handler={() => handleUpdateTitle()} active={!disabled}>
       <div className="d-flex align-items-center">
-        <h1
-          ref={inputRef}
-          contentEditable={editable ? true : false}
+        <ContentEditable
+          innerRef={contentEditable}
+          html={html}
+          disabled={disabled}
+          onChange={(e) => {
+            setHtml(e.target.value);
+          }}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && editable) {
+            if (e.key === "Enter" && !disabled) {
               handleUpdateTitle();
             }
+            if (e.keyCode === 27 && !disabled) {
+              setHtml(title);
+              setDisabled(true);
+            }
           }}
+          tagName="h1"
           css={css`
+            margin: 0;
+            padding: 0;
             outline: 0px solid transparent;
           `}
-        >
-          {title}
-        </h1>
-        {editable ? (
+        />
+        {!disabled ? (
           <FaCheck
             css={css`
               margin-bottom: 8px;
@@ -70,7 +81,7 @@ const EditableTitle: React.FC<Props> = ({ title, updateTitle }) => {
               }
             `}
             onClick={() => {
-              setEditable(true);
+              setDisabled(false);
             }}
           />
         )}

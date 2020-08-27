@@ -2,6 +2,7 @@ import React, { createRef, useEffect, useState } from "react";
 import { css } from "@emotion/core";
 import { FaPencilAlt, FaCheck } from "react-icons/fa";
 import OnClickOutside from "../OnClickOutside";
+import ContentEditable from "react-contenteditable";
 
 interface Props {
   text: string;
@@ -9,24 +10,25 @@ interface Props {
 }
 
 const EditableText: React.FC<Props> = ({ text, updateText }) => {
-  const [editable, setEditable] = useState(false);
-  const inputRef = createRef<HTMLHeadingElement>();
+  const [disabled, setDisabled] = useState(true);
+  const contentEditable = createRef<HTMLHtmlElement>();
+  const [html, setHtml] = useState(text);
 
-  useEffect(() => {
-    if (editable) {
-      inputRef.current!.focus();
-    }
-  }, [editable]);
-
-  const handleUpdateTitle = () => {
-    setEditable(() => {
-      updateText(inputRef.current?.innerText);
-      return false;
+  const handleUpdateText = () => {
+    setDisabled(() => {
+      updateText(html);
+      return true;
     });
   };
 
+  useEffect(() => {
+    if (!disabled) {
+      contentEditable.current!.focus();
+    }
+  }, [!disabled]);
+
   return (
-    <OnClickOutside active={editable} handler={() => handleUpdateTitle()}>
+    <OnClickOutside active={!disabled} handler={() => handleUpdateText()}>
       <div
         css={css`
           svg {
@@ -35,23 +37,30 @@ const EditableText: React.FC<Props> = ({ text, updateText }) => {
         `}
         className="d-flex align-items-center"
       >
-        <p
-          ref={inputRef}
-          contentEditable={editable ? true : false}
+        <ContentEditable
+          innerRef={contentEditable}
+          html={html}
+          disabled={disabled}
+          onChange={(e) => {
+            setHtml(e.target.value);
+          }}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && editable) {
-              handleUpdateTitle();
+            if (e.key === "Enter" && !disabled) {
+              handleUpdateText();
+            }
+            if (e.keyCode === 27 && !disabled) {
+              setHtml(text);
+              setDisabled(true);
             }
           }}
+          tagName="p"
           css={css`
             margin: 0;
             padding: 0;
             outline: 0px solid transparent;
           `}
-        >
-          {text}
-        </p>
-        {editable ? (
+        />
+        {!disabled ? (
           <FaCheck
             css={css`
               margin-bottom: 2px;
@@ -63,7 +72,7 @@ const EditableText: React.FC<Props> = ({ text, updateText }) => {
               }
             `}
             onClick={() => {
-              handleUpdateTitle();
+              handleUpdateText();
             }}
           />
         ) : (
@@ -78,7 +87,7 @@ const EditableText: React.FC<Props> = ({ text, updateText }) => {
               }
             `}
             onClick={() => {
-              setEditable(true);
+              setDisabled(false);
             }}
           />
         )}

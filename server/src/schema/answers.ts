@@ -3,14 +3,24 @@ import {
   IMutationCreateAnswerArgs,
   IMutationUpdateAnswerArgs,
   IMutationDeleteAnswerArgs,
+  IMutationReorderAnswersArgs,
 } from "../graphql-types";
 import { MyContext } from "../my-types";
 import { Survey } from "../db/models/Survey";
 import { Answer } from "../db/models/Answer";
+import { Question } from "../db/models/Question";
 
 export const typeDef = gql`
+  input ReorderAnswersInput {
+    surveyId: ID!
+    questionId: ID!
+    indexedIds: [IndexedId!]!
+    startIndex: Int!
+    endIndex: Int!
+  }
+
   extend type Mutation {
-    createAnswer(questionId: ID!, surveyId: ID!): Answer!
+    createAnswer(questionId: ID!, surveyId: ID!, order: Int!): Answer!
     updateAnswer(
       id: ID!
       questionId: ID!
@@ -18,6 +28,7 @@ export const typeDef = gql`
       text: String!
     ): Answer!
     deleteAnswer(id: ID!, questionId: ID!, surveyId: ID!): Boolean!
+    reorderAnswers(input: ReorderAnswersInput!): Boolean!
   }
 `;
 
@@ -25,7 +36,7 @@ export const resolvers = {
   Mutation: {
     createAnswer: async (
       _: any,
-      { questionId, surveyId }: IMutationCreateAnswerArgs,
+      { questionId, surveyId, order }: IMutationCreateAnswerArgs,
       { user: { id: userId } }: MyContext
     ) => {
       const survey = await Survey.query().findOne({
@@ -41,6 +52,7 @@ export const resolvers = {
         .insert({
           text: "New Answer",
           questionId: question.id,
+          order,
         })
         .returning("*");
     },
@@ -97,6 +109,49 @@ export const resolvers = {
       } catch (error) {
         throw error;
       }
+    },
+    reorderAnswers: async (
+      _: any,
+      {
+        input: { surveyId, questionId, indexedIds, startIndex, endIndex },
+      }: IMutationReorderAnswersArgs,
+      { user: { id: userId } }: MyContext
+    ) => {
+      if (startIndex !== endIndex) {
+        const trx = await Answer.startTransaction();
+
+        try {
+          const survey = await Survey.query().findOne({
+            userId,
+            id: surveyId,
+          });
+
+          const question = await Question.query().findOne({
+            id: questionId,
+            surveyId: survey.id,
+          });
+
+          indexedIds.map(async (answer) => {
+            await Answer.query(trx)
+              .update({
+                order: answer.index,
+              })
+              .where("id", answer.id)
+              .andWhere("questionId", question.id);
+
+            await trx.commit();
+
+            return true;
+          });
+
+          return true;
+        } catch (err) {
+          await trx.rollback();
+          throw err;
+        }
+      }
+
+      return true;
     },
   },
 };

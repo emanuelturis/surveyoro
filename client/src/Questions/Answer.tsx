@@ -3,7 +3,8 @@ import { IAnswer } from "../graphql-types";
 import EditableText from "../Shared/EditableText/EditableText";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaGripLines } from "react-icons/fa";
+import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
   answer: IAnswer;
@@ -26,6 +27,7 @@ const UPDATE_ANSWER = gql`
     ) {
       id
       text
+      order
     }
   }
 `;
@@ -51,9 +53,11 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
           fragment Question on Question {
             id
             text
+            order
             answers {
               id
               text
+              order
             }
           }
         `,
@@ -65,9 +69,11 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
           fragment Question on Question {
             id
             text
+            order
             answers {
               id
               text
+              order
             }
           }
         `,
@@ -82,41 +88,63 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
   });
 
   return (
-    <div
-      css={css`
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 10px 0px;
-      `}
-    >
-      <EditableText
-        text={answer.text}
-        updateText={(text: string) => {
-          updateAnswer({
-            variables: {
-              id: answer.id,
-              questionId,
-              surveyId,
-              text,
-            },
-          });
-        }}
-      />
-      <FaTrash
-        css={css`
-          font-size: 15px;
-          opacity: 0.8;
-          margin-left: 15px;
-          cursor: pointer;
-          &:hover {
-            opacity: 1;
-          }
-        `}
-        className="text-danger"
-        onClick={() => deleteAnswer()}
-      />
-    </div>
+    <Draggable key={answer.id} draggableId={answer.id} index={answer.order}>
+      {(provided) => (
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0px;
+          `}
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+        >
+          <EditableText
+            text={answer.text}
+            updateText={(text: string) => {
+              updateAnswer({
+                variables: {
+                  id: answer.id,
+                  questionId,
+                  surveyId,
+                  text,
+                },
+              });
+            }}
+          />
+          <div
+            css={css`
+              svg {
+                font-size: 15px;
+                opacity: 0.8;
+                margin-left: 15px;
+                &:hover {
+                  opacity: 1;
+                }
+              }
+            `}
+          >
+            <FaTrash
+              css={css`
+                font-size: 15px;
+                opacity: 0.8;
+                margin-left: 15px;
+                cursor: pointer;
+                &:hover {
+                  opacity: 1;
+                }
+              `}
+              className="text-danger"
+              onClick={() => deleteAnswer()}
+            />
+            <span {...provided.dragHandleProps}>
+              <FaGripLines />
+            </span>
+          </div>
+        </div>
+      )}
+    </Draggable>
   );
 };
 
