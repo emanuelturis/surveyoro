@@ -8,6 +8,7 @@ export class Answer extends Model {
   }
 
   id!: string;
+  text!: string;
   questionId!: string;
 
   question!: Question;

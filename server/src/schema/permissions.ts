@@ -36,6 +36,12 @@ export default shield(
       createSurvey: isAuthenticated,
       deleteSurvey: isAuthenticated,
       updateSurvey: isAuthenticated,
+      createQuestion: isAuthenticated,
+      deleteQuestion: isAuthenticated,
+      createAnswer: isAuthenticated,
+      updateQuestion: isAuthenticated,
+      updateAnswer: isAuthenticated,
+      deleteAnswer: isAuthenticated,
     },
   },
   { allowExternalErrors: true }

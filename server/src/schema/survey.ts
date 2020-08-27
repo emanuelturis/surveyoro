@@ -5,22 +5,25 @@ import {
   IMutationCreateSurveyArgs,
   IMutationDeleteSurveyArgs,
   IMutationUpdateSurveyArgs,
+  IQuestion,
 } from "../graphql-types";
 import { Survey } from "../db/models/Survey";
 import { Question } from "../db/models/Question";
 import { MyContext } from "../my-types";
+import { Answer } from "../db/models/Answer";
 
 export const typeDef = gql`
   type Survey {
     id: ID!
     name: String!
     active: Boolean!
-    questions: [Question!]
+    questions: [Question!]!
   }
 
   type Question {
     id: ID!
-    answers: [Answer!]
+    text: String!
+    answers: [Answer!]!
   }
 
   type Person {
@@ -62,7 +65,16 @@ export const resolvers = {
   },
   Survey: {
     questions: async ({ id }: ISurvey): Promise<Question[]> => {
-      return Question.query().where("surveyId", id);
+      return Question.query()
+        .where("surveyId", id)
+        .orderBy("createdAt", "desc");
+    },
+  },
+  Question: {
+    answers: async ({ id }: IQuestion): Promise<Answer[]> => {
+      return Answer.query()
+        .where("questionId", id)
+        .orderBy("createdAt", "desc");
     },
   },
   Mutation: {

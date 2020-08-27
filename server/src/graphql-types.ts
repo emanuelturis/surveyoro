@@ -29,7 +29,13 @@ export type IMutation = {
   login: IUserWithToken;
   createSurvey: ISurvey;
   deleteSurvey: Scalars['Boolean'];
-  updateSurvey: Scalars['Boolean'];
+  updateSurvey: ISurvey;
+  createQuestion: IQuestion;
+  deleteQuestion: Scalars['Boolean'];
+  updateQuestion: IQuestion;
+  createAnswer: IAnswer;
+  updateAnswer: IAnswer;
+  deleteAnswer: Scalars['Boolean'];
 };
 
 
@@ -59,6 +65,45 @@ export type IMutationUpdateSurveyArgs = {
   active: Scalars['Boolean'];
 };
 
+
+export type IMutationCreateQuestionArgs = {
+  surveyId: Scalars['ID'];
+};
+
+
+export type IMutationDeleteQuestionArgs = {
+  id: Scalars['ID'];
+  surveyId: Scalars['ID'];
+};
+
+
+export type IMutationUpdateQuestionArgs = {
+  id: Scalars['ID'];
+  surveyId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+
+export type IMutationCreateAnswerArgs = {
+  questionId: Scalars['ID'];
+  surveyId: Scalars['ID'];
+};
+
+
+export type IMutationUpdateAnswerArgs = {
+  id: Scalars['ID'];
+  questionId: Scalars['ID'];
+  surveyId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+
+export type IMutationDeleteAnswerArgs = {
+  id: Scalars['ID'];
+  questionId: Scalars['ID'];
+  surveyId: Scalars['ID'];
+};
+
 export type IPerson = {
   __typename?: 'Person';
   id: Scalars['ID'];
@@ -73,17 +118,24 @@ export type IQuery = {
   _empty?: Maybe<Scalars['String']>;
   user: IUser;
   survey: ISurvey;
+  question: IQuestion;
 };
 
 
 export type IQuerySurveyArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
+};
+
+
+export type IQueryQuestionArgs = {
+  id: Scalars['ID'];
 };
 
 export type IQuestion = {
   __typename?: 'Question';
   id: Scalars['ID'];
-  answers?: Maybe<Array<IAnswer>>;
+  text: Scalars['String'];
+  answers: Array<IAnswer>;
 };
 
 export type IRegisterInput = {
@@ -106,7 +158,7 @@ export type ISurvey = {
   id: Scalars['ID'];
   name: Scalars['String'];
   active: Scalars['Boolean'];
-  questions?: Maybe<Array<IQuestion>>;
+  questions: Array<IQuestion>;
 };
 
 export type IUser = {
@@ -248,7 +300,13 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   login?: Resolver<IResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<IMutationLoginArgs, 'input'>>;
   createSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationCreateSurveyArgs, 'name'>>;
   deleteSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteSurveyArgs, 'id'>>;
-  updateSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateSurveyArgs, 'id' | 'name' | 'active'>>;
+  updateSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationUpdateSurveyArgs, 'id' | 'name' | 'active'>>;
+  createQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationCreateQuestionArgs, 'surveyId'>>;
+  deleteQuestion?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteQuestionArgs, 'id' | 'surveyId'>>;
+  updateQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationUpdateQuestionArgs, 'id' | 'surveyId' | 'text'>>;
+  createAnswer?: Resolver<IResolversTypes['Answer'], ParentType, ContextType, RequireFields<IMutationCreateAnswerArgs, 'questionId' | 'surveyId'>>;
+  updateAnswer?: Resolver<IResolversTypes['Answer'], ParentType, ContextType, RequireFields<IMutationUpdateAnswerArgs, 'id' | 'questionId' | 'surveyId' | 'text'>>;
+  deleteAnswer?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteAnswerArgs, 'id' | 'questionId' | 'surveyId'>>;
 };
 
 export type IPersonResolvers<ContextType = any, ParentType extends IResolversParentTypes['Person'] = IResolversParentTypes['Person']> = {
@@ -264,11 +322,13 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   _empty?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
   survey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IQuerySurveyArgs, 'id'>>;
+  question?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IQueryQuestionArgs, 'id'>>;
 };
 
 export type IQuestionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Question'] = IResolversParentTypes['Question']> = {
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
-  answers?: Resolver<Maybe<Array<IResolversTypes['Answer']>>, ParentType, ContextType>;
+  text?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  answers?: Resolver<Array<IResolversTypes['Answer']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -284,7 +344,7 @@ export type ISurveyResolvers<ContextType = any, ParentType extends IResolversPar
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   active?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
-  questions?: Resolver<Maybe<Array<IResolversTypes['Question']>>, ParentType, ContextType>;
+  questions?: Resolver<Array<IResolversTypes['Question']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

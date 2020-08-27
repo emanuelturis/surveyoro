@@ -8,6 +8,7 @@ export class Question extends Model {
   }
 
   id!: string;
+  text!: string;
   surveyId!: string;
 
   survey!: Survey;
