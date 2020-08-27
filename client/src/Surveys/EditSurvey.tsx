@@ -7,6 +7,7 @@ import { css } from "@emotion/core";
 import EditableTitle from "../Shared/EditableTitle/EditableTitle";
 import Toggle from "react-toggle";
 import "./Toggle.css";
+import Questions from "../Questions";
 
 const SURVEY = gql`
   query Survey($id: ID!) {
@@ -14,6 +15,14 @@ const SURVEY = gql`
       id
       name
       active
+      questions {
+        id
+        text
+        answers {
+          id
+          text
+        }
+      }
     }
   }
 `;
@@ -109,6 +118,7 @@ const EditSurvey: React.FC = () => {
               />
             </div>
           </div>
+          <Questions questions={data.survey.questions} surveyId={id} />
         </div>
       )}
     </div>

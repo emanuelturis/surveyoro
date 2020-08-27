@@ -14,11 +14,17 @@ export type IQuery = {
   _empty?: Maybe<Scalars['String']>;
   user: IUser;
   survey: ISurvey;
+  question: IQuestion;
 };
 
 
 export type IQuerySurveyArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
+};
+
+
+export type IQueryQuestionArgs = {
+  id: Scalars['ID'];
 };
 
 export type IUser = {
@@ -35,13 +41,14 @@ export type ISurvey = {
   id: Scalars['ID'];
   name: Scalars['String'];
   active: Scalars['Boolean'];
-  questions?: Maybe<Array<IQuestion>>;
+  questions: Array<IQuestion>;
 };
 
 export type IQuestion = {
   __typename?: 'Question';
   id: Scalars['ID'];
-  answers?: Maybe<Array<IAnswer>>;
+  text: Scalars['String'];
+  answers: Array<IAnswer>;
 };
 
 export type IAnswer = {
@@ -58,6 +65,8 @@ export type IMutation = {
   createSurvey: ISurvey;
   deleteSurvey: Scalars['Boolean'];
   updateSurvey: ISurvey;
+  createQuestion: IQuestion;
+  deleteQuestion: Scalars['Boolean'];
 };
 
 
@@ -85,6 +94,17 @@ export type IMutationUpdateSurveyArgs = {
   id: Scalars['ID'];
   name: Scalars['String'];
   active: Scalars['Boolean'];
+};
+
+
+export type IMutationCreateQuestionArgs = {
+  surveyId: Scalars['ID'];
+};
+
+
+export type IMutationDeleteQuestionArgs = {
+  id: Scalars['ID'];
+  surveyId: Scalars['ID'];
 };
 
 export type IRegisterInput = {

@@ -45,7 +45,7 @@ const Surveys: React.FC = () => {
       </h1>
       <ListGroup>
         {data.user.surveys.map((survey: ISurvey) => (
-          <Survey survey={survey} />
+          <Survey key={survey.id} survey={survey} />
         ))}
       </ListGroup>
       <Button
