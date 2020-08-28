@@ -7,6 +7,9 @@ import {
   FaTrash,
   FaCaretRight,
   FaGripLines,
+  FaKeyboard,
+  FaRegCircle,
+  FaListUl,
 } from "react-icons/fa";
 import { ListGroup } from "react-bootstrap";
 import EditableText from "../Shared/EditableText/EditableText";
@@ -33,6 +36,7 @@ const UPDATE_QUESTION = gql`
     updateQuestion(id: $id, surveyId: $surveyId, text: $text) {
       id
       text
+      type
       order
     }
   }
@@ -101,6 +105,12 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
     },
   });
 
+  const questionsIcons: { [key: string]: JSX.Element } = {
+    text: <FaKeyboard />,
+    radio: <FaRegCircle />,
+    check: <FaListUl />,
+  };
+
   return (
     <Draggable
       key={question.id}
@@ -132,6 +142,16 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
                   `}
                   onClick={() => setOpen(!open)}
                 />
+                <div
+                  css={css`
+                    svg {
+                      margin-right: 5px;
+                      margin-bottom: 4px;
+                    }
+                  `}
+                >
+                  {questionsIcons[question.type]}
+                </div>
                 <EditableText
                   text={question.text}
                   updateText={(text: string) => {
@@ -172,11 +192,21 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
             {open && (
               <div>
                 <hr />
-                <Answers
-                  answers={question.answers}
-                  questionId={question.id}
-                  surveyId={surveyId}
-                />
+                {question.type !== "text" ? (
+                  <Answers
+                    answers={question.answers}
+                    questionId={question.id}
+                    surveyId={surveyId}
+                  />
+                ) : (
+                  <div>
+                    <h5>Question is a {question.type}.</h5>
+                    <p className="text-secondary">
+                      The question will have a text input, allowing any value to
+                      be inserted.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

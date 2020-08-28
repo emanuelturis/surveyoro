@@ -9,6 +9,7 @@ export class Question extends Model {
 
   id!: string;
   text!: string;
+  type!: string;
   order!: number;
   surveyId!: string;
 

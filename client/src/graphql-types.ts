@@ -48,6 +48,7 @@ export type IQuestion = {
   __typename?: 'Question';
   id: Scalars['ID'];
   text: Scalars['String'];
+  type: Scalars['String'];
   order: Scalars['Int'];
   answers: Array<IAnswer>;
 };
@@ -74,6 +75,7 @@ export type IMutation = {
   createAnswer: IAnswer;
   updateAnswer: IAnswer;
   deleteAnswer: Scalars['Boolean'];
+  reorderAnswers: Scalars['Boolean'];
 };
 
 
@@ -106,6 +108,7 @@ export type IMutationUpdateSurveyArgs = {
 
 export type IMutationCreateQuestionArgs = {
   surveyId: Scalars['ID'];
+  type: Scalars['String'];
   order: Scalars['Int'];
 };
 
@@ -149,6 +152,11 @@ export type IMutationDeleteAnswerArgs = {
   surveyId: Scalars['ID'];
 };
 
+
+export type IMutationReorderAnswersArgs = {
+  input: IReorderAnswersInput;
+};
+
 export type IRegisterInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -177,6 +185,14 @@ export type IReorderQuestionsInput = {
 export type IIndexedId = {
   id: Scalars['ID'];
   index: Scalars['Int'];
+};
+
+export type IReorderAnswersInput = {
+  surveyId: Scalars['ID'];
+  questionId: Scalars['ID'];
+  indexedIds: Array<IIndexedId>;
+  startIndex: Scalars['Int'];
+  endIndex: Scalars['Int'];
 };
 
 export type IPerson = {

@@ -23,6 +23,7 @@ export const typeDef = gql`
   type Question {
     id: ID!
     text: String!
+    type: String!
     order: Int!
     answers: [Answer!]!
   }

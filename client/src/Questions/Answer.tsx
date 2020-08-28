@@ -53,6 +53,7 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
           fragment Question on Question {
             id
             text
+            type
             order
             answers {
               id
@@ -69,6 +70,7 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
           fragment Question on Question {
             id
             text
+            type
             order
             answers {
               id

@@ -77,6 +77,7 @@ export type IMutationUpdateSurveyArgs = {
 export type IMutationCreateQuestionArgs = {
   surveyId: Scalars['ID'];
   order: Scalars['Int'];
+  type: Scalars['String'];
 };
 
 
@@ -346,7 +347,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   createSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationCreateSurveyArgs, 'name'>>;
   deleteSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteSurveyArgs, 'id'>>;
   updateSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationUpdateSurveyArgs, 'id' | 'name' | 'active'>>;
-  createQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationCreateQuestionArgs, 'surveyId' | 'order'>>;
+  createQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationCreateQuestionArgs, 'surveyId' | 'order' | 'type'>>;
   deleteQuestion?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteQuestionArgs, 'id' | 'surveyId'>>;
   updateQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationUpdateQuestionArgs, 'id' | 'surveyId' | 'text'>>;
   reorderQuestions?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationReorderQuestionsArgs, 'input'>>;

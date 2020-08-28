@@ -5,7 +5,6 @@ import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
 import Answer from "./Answer";
 import { Droppable, DragDropContext, DropResult } from "react-beautiful-dnd";
-import { resultKeyNameFromField } from "@apollo/client/utilities";
 
 interface Props {
   answers: IAnswer[];
@@ -120,6 +119,7 @@ const Answers: React.FC<Props> = ({ answers, questionId, surveyId }) => {
               fragment Question on Question {
                 id
                 text
+                type
                 order
                 answers {
                   id
@@ -136,6 +136,7 @@ const Answers: React.FC<Props> = ({ answers, questionId, surveyId }) => {
               fragment Question on Question {
                 id
                 text
+                type
                 order
                 answers {
                   id

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import { IQuestion } from "../graphql-types";
 import Question from "./Question";
-import { Button, ListGroup } from "react-bootstrap";
+import { Button, ListGroup, Dropdown } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import { css } from "@emotion/core";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { FaListUl, FaKeyboard, FaRegCircle } from "react-icons/fa";
 
 interface Props {
   questions: IQuestion[];
@@ -12,10 +13,11 @@ interface Props {
 }
 
 const CREATE_QUESTION = gql`
-  mutation CreateQuestion($surveyId: ID!, $order: Int!) {
-    createQuestion(surveyId: $surveyId, order: $order) {
+  mutation CreateQuestion($surveyId: ID!, $type: String!, $order: Int!) {
+    createQuestion(surveyId: $surveyId, type: $type, order: $order) {
       id
       text
+      type
       order
     }
   }
@@ -29,10 +31,6 @@ const REORDER_QUESTIONS = gql`
 
 const Questions: React.FC<Props> = ({ questions, surveyId }) => {
   const [createQuestion] = useMutation(CREATE_QUESTION, {
-    variables: {
-      surveyId,
-      order: questions.length,
-    },
     update: (cache, response) => {
       const data: any = cache.readQuery({
         query: gql`
@@ -44,6 +42,7 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
               questions {
                 id
                 text
+                type
                 order
               }
             }
@@ -64,6 +63,7 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
               questions {
                 id
                 text
+                type
                 order
               }
             }
@@ -81,6 +81,16 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
       });
     },
   });
+
+  const handleCreateQuestion = (type: string) => {
+    createQuestion({
+      variables: {
+        surveyId,
+        order: questions.length,
+        type,
+      },
+    });
+  };
 
   const [reorderQuestions] = useMutation(REORDER_QUESTIONS);
 
@@ -194,7 +204,7 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
               <p className="text-secondary">
                 Click below to add the first question to this survey.
               </p>
-              <Button onClick={() => createQuestion()}>
+              <Button onClick={() => handleCreateQuestion("radio")}>
                 Add First Question
               </Button>
             </ListGroup.Item>
@@ -213,14 +223,41 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
                     />
                   ))}
                   {provided.placeholder}
-                  <Button
+                  <Dropdown
                     css={css`
                       margin-top: 25px;
+                      svg {
+                        font-size: 15px;
+                        margin-bottom: 3.5px;
+                        margin-right: 5px;
+                      }
                     `}
-                    onClick={() => createQuestion()}
                   >
-                    Add New Question
-                  </Button>
+                    <Dropdown.Toggle id="dropdown-basic">
+                      Add New Question
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={() => handleCreateQuestion("check")}
+                      >
+                        <FaListUl />
+                        Multi-Option
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => handleCreateQuestion("radio")}
+                      >
+                        <FaRegCircle />
+                        One-Option
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => handleCreateQuestion("text")}
+                      >
+                        <FaKeyboard />
+                        Text
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               )}
             </Droppable>

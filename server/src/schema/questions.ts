@@ -23,7 +23,7 @@ export const typeDef = gql`
   }
 
   extend type Mutation {
-    createQuestion(surveyId: ID!, order: Int!): Question!
+    createQuestion(surveyId: ID!, type: String!, order: Int!): Question!
     deleteQuestion(id: ID!, surveyId: ID!): Boolean!
     updateQuestion(id: ID!, surveyId: ID!, text: String!): Question!
     reorderQuestions(input: ReorderQuestionsInput!): Boolean!
@@ -39,7 +39,7 @@ export const resolvers = {
   Mutation: {
     createQuestion: async (
       _: any,
-      { surveyId, order }: IMutationCreateQuestionArgs,
+      { surveyId, type, order }: IMutationCreateQuestionArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Question> => {
       const survey = await Survey.query().findOne({
@@ -51,6 +51,7 @@ export const resolvers = {
         .$relatedQuery("questions")
         .insert({
           text: "New Question",
+          type,
           order,
         })
         .returning("*")
