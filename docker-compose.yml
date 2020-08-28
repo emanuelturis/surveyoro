@@ -39,6 +39,21 @@ services:
     command: npm run start
     stdin_open: true
 
+  app:
+    build:
+      context: ./app
+    volumes:
+      - "./app:/src/app"
+      - /src/client/node_modules
+    ports:
+      - "3001:3001"
+    networks:
+      - surveyrus
+    environment:
+      - NODE_ENV=development
+    command: npx next dev -p 3001
+    stdin_open: true
+
   postgres:
     image: postgres
     ports:
