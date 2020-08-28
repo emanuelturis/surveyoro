@@ -53,6 +53,22 @@ const Survey: React.FC = () => {
     return null;
   }
 
+  if (data && data.survey.active === false) {
+    return (
+      <div
+        css={css`
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-weight: bold;
+        `}
+      >
+        <h1>Survey Doesn't Exist.</h1>
+      </div>
+    );
+  }
+
   const handleSetSubmisson = (data: object) => {
     setSubmission((submission) => ({
       ...submission,
