@@ -44,6 +44,7 @@ export type IMutation = {
   updateAnswer: IAnswer;
   deleteAnswer: Scalars['Boolean'];
   reorderAnswers: Scalars['Boolean'];
+  addSubmission: Scalars['Boolean'];
 };
 
 
@@ -76,8 +77,8 @@ export type IMutationUpdateSurveyArgs = {
 
 export type IMutationCreateQuestionArgs = {
   surveyId: Scalars['ID'];
-  order: Scalars['Int'];
   type: Scalars['String'];
+  order: Scalars['Int'];
 };
 
 
@@ -125,6 +126,13 @@ export type IMutationReorderAnswersArgs = {
   input: IReorderAnswersInput;
 };
 
+
+export type IMutationAddSubmissionArgs = {
+  person: IPersonInput;
+  submission: Array<ISubmissionInput>;
+  surveyId: Scalars['String'];
+};
+
 export type IPerson = {
   __typename?: 'Person';
   id: Scalars['ID'];
@@ -132,6 +140,12 @@ export type IPerson = {
   lastName: Scalars['String'];
   email: Scalars['String'];
   answers: Array<IAnswer>;
+};
+
+export type IPersonInput = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type IQuery = {
@@ -156,6 +170,7 @@ export type IQuestion = {
   __typename?: 'Question';
   id: Scalars['ID'];
   text: Scalars['String'];
+  type: Scalars['String'];
   order: Scalars['Int'];
   answers: Array<IAnswer>;
 };
@@ -187,7 +202,13 @@ export type ISubmission = {
   id: Scalars['ID'];
   person: IPerson;
   question: IQuestion;
-  answer: IAnswer;
+  answer: Scalars['String'];
+};
+
+export type ISubmissionInput = {
+  questionId: Scalars['ID'];
+  answerId?: Maybe<Scalars['ID']>;
+  answerText: Scalars['String'];
 };
 
 export type ISurvey = {
@@ -307,6 +328,8 @@ export type IResolversTypes = {
   ReorderQuestionsInput: IReorderQuestionsInput;
   IndexedId: IIndexedId;
   ReorderAnswersInput: IReorderAnswersInput;
+  PersonInput: IPersonInput;
+  SubmissionInput: ISubmissionInput;
   Person: ResolverTypeWrapper<IPerson>;
   Submission: ResolverTypeWrapper<ISubmission>;
 };
@@ -329,6 +352,8 @@ export type IResolversParentTypes = {
   ReorderQuestionsInput: IReorderQuestionsInput;
   IndexedId: IIndexedId;
   ReorderAnswersInput: IReorderAnswersInput;
+  PersonInput: IPersonInput;
+  SubmissionInput: ISubmissionInput;
   Person: IPerson;
   Submission: ISubmission;
 };
@@ -347,7 +372,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   createSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationCreateSurveyArgs, 'name'>>;
   deleteSurvey?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteSurveyArgs, 'id'>>;
   updateSurvey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IMutationUpdateSurveyArgs, 'id' | 'name' | 'active'>>;
-  createQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationCreateQuestionArgs, 'surveyId' | 'order' | 'type'>>;
+  createQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationCreateQuestionArgs, 'surveyId' | 'type' | 'order'>>;
   deleteQuestion?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteQuestionArgs, 'id' | 'surveyId'>>;
   updateQuestion?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IMutationUpdateQuestionArgs, 'id' | 'surveyId' | 'text'>>;
   reorderQuestions?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationReorderQuestionsArgs, 'input'>>;
@@ -355,6 +380,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAnswer?: Resolver<IResolversTypes['Answer'], ParentType, ContextType, RequireFields<IMutationUpdateAnswerArgs, 'id' | 'questionId' | 'surveyId' | 'text'>>;
   deleteAnswer?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteAnswerArgs, 'id' | 'questionId' | 'surveyId'>>;
   reorderAnswers?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationReorderAnswersArgs, 'input'>>;
+  addSubmission?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationAddSubmissionArgs, 'person' | 'submission' | 'surveyId'>>;
 };
 
 export type IPersonResolvers<ContextType = any, ParentType extends IResolversParentTypes['Person'] = IResolversParentTypes['Person']> = {
@@ -376,6 +402,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 export type IQuestionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Question'] = IResolversParentTypes['Question']> = {
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
   text?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   order?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   answers?: Resolver<Array<IResolversTypes['Answer']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -385,7 +412,7 @@ export type ISubmissionResolvers<ContextType = any, ParentType extends IResolver
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
   person?: Resolver<IResolversTypes['Person'], ParentType, ContextType>;
   question?: Resolver<IResolversTypes['Question'], ParentType, ContextType>;
-  answer?: Resolver<IResolversTypes['Answer'], ParentType, ContextType>;
+  answer?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

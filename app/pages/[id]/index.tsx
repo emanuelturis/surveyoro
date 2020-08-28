@@ -41,13 +41,17 @@ const Survey: React.FC = () => {
   const { id } = router.query;
 
   const [step, setStep] = useState(0);
-  const [submission, setSubmission] = useState({});
+  const [submission, setSubmission] = useState([]);
 
   const { data, loading } = useQuery<ISurveyData, IQuerySurveyArgs>(SURVEY, {
     variables: {
       id: `${id}`,
     },
   });
+
+  useEffect(() => {
+    console.log(submission);
+  }, [submission]);
 
   if (loading) {
     return null;
@@ -70,10 +74,7 @@ const Survey: React.FC = () => {
   }
 
   const handleSetSubmisson = (data: object) => {
-    setSubmission((submission) => ({
-      ...submission,
-      ...data,
-    }));
+    setSubmission((submission) => [...submission, data]);
   };
 
   const questions = data.survey.questions.map((question) =>
@@ -92,7 +93,10 @@ const Survey: React.FC = () => {
       setSubmission={handleSetSubmisson}
     />,
     ...questions,
-    <Finished submission={submission} />,
+    <Finished
+      submission={submission}
+      steps={data.survey.questions.length + 1}
+    />,
   ];
 
   return (

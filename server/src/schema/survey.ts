@@ -46,7 +46,7 @@ export const typeDef = gql`
     id: ID!
     person: Person!
     question: Question!
-    answer: Answer!
+    answer: String!
   }
 
   extend type Query {

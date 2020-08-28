@@ -6,6 +6,10 @@ import {
   resolvers as QuestionResolvers,
 } from "./questions";
 import { typeDef as Answer, resolvers as AnswerResolvers } from "./answers";
+import {
+  typeDef as Submission,
+  resolvers as SubmissionResolvers,
+} from "./submissions";
 import merge from "lodash/merge";
 
 const Query = gql`
@@ -26,11 +30,12 @@ const Mutation = gql`
 `;
 
 export default makeExecutableSchema({
-  typeDefs: [Query, Mutation, User, Survey, Question, Answer],
+  typeDefs: [Query, Mutation, User, Survey, Question, Answer, Submission],
   resolvers: merge(
     UserResolvers,
     SurveyResolvers,
     QuestionResolvers,
-    AnswerResolvers
+    AnswerResolvers,
+    SubmissionResolvers
   ),
 });

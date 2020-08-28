@@ -21,15 +21,15 @@ const CheckQuestion = ({
         <Form.Check
           key={answer.id}
           type="checkbox"
-          checked={checked.includes(answer.id)}
+          checked={checked.includes(answer)}
           onChange={() => {
-            if (checked.includes(answer.id)) {
+            if (checked.includes(answer)) {
               return setChecked((checked) => {
-                return checked.filter((id) => id !== answer.id);
+                return checked.filter(({ id }) => id !== answer.id);
               });
             }
             setChecked((checked) => {
-              return [...checked, answer.id];
+              return [...checked, answer];
             });
           }}
           label={answer.text}
@@ -41,8 +41,12 @@ const CheckQuestion = ({
             return;
           }
           setStep(step + 1);
-          setSubmission({
-            [question.id]: checked,
+          checked.map((c) => {
+            setSubmission({
+              questionId: question.id,
+              answerId: c.id,
+              answerText: c.text,
+            });
           });
         }}
       >

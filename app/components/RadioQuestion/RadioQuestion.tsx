@@ -8,11 +8,16 @@ interface Props {
   actions: IActions;
 }
 
+interface IRadioChecked {
+  id: string;
+  text: string;
+}
+
 const RadioQuestion = ({
   question,
   actions: { step, steps, setStep, setSubmission },
 }: Props) => {
-  const [checked, setChecked] = useState<string | null>(null);
+  const [checked, setChecked] = useState<IRadioChecked | null>(null);
 
   return (
     <div>
@@ -21,8 +26,8 @@ const RadioQuestion = ({
         <Form.Check
           key={answer.id}
           type="radio"
-          checked={checked === answer.id}
-          onChange={() => setChecked(answer.id)}
+          checked={checked === answer}
+          onChange={() => setChecked(answer)}
           label={answer.text}
         />
       ))}
@@ -33,7 +38,9 @@ const RadioQuestion = ({
           }
           setStep(step + 1);
           setSubmission({
-            [question.id]: checked,
+            questionId: question.id,
+            answerId: checked.id,
+            answerText: checked.text,
           });
         }}
       >

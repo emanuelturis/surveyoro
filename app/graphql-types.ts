@@ -76,6 +76,7 @@ export type IMutation = {
   updateAnswer: IAnswer;
   deleteAnswer: Scalars['Boolean'];
   reorderAnswers: Scalars['Boolean'];
+  addSubmission: Scalars['Boolean'];
 };
 
 
@@ -157,6 +158,13 @@ export type IMutationReorderAnswersArgs = {
   input: IReorderAnswersInput;
 };
 
+
+export type IMutationAddSubmissionArgs = {
+  person: IPersonInput;
+  submission: Array<ISubmissionInput>;
+  surveyId: Scalars['String'];
+};
+
 export type IRegisterInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -195,6 +203,18 @@ export type IReorderAnswersInput = {
   endIndex: Scalars['Int'];
 };
 
+export type IPersonInput = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type ISubmissionInput = {
+  questionId: Scalars['ID'];
+  answerId?: Maybe<Scalars['ID']>;
+  answerText: Scalars['String'];
+};
+
 export type IPerson = {
   __typename?: 'Person';
   id: Scalars['ID'];
@@ -209,5 +229,5 @@ export type ISubmission = {
   id: Scalars['ID'];
   person: IPerson;
   question: IQuestion;
-  answer: IAnswer;
+  answer: Scalars['String'];
 };

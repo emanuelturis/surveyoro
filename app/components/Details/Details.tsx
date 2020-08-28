@@ -24,7 +24,7 @@ const Details: React.FC<Props> = ({ step, steps, setStep, setSubmission }) => {
     <Formik
       initialValues={{ firstName: "", lastName: "", email: "" }}
       onSubmit={(values) => {
-        setSubmission(values);
+        setSubmission(Object.assign({}, values));
         setStep(step + 1);
       }}
       validationSchema={detailsValidationSchema}

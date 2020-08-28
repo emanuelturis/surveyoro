@@ -13,7 +13,9 @@ export class Submission extends Model {
   id!: string;
   personId!: string;
   questionId!: string;
-  answerId!: string;
+  surveyId!: string;
+  answerId?: string | null | undefined;
+  answerText!: string;
 
   person!: Person;
   survey!: Survey;

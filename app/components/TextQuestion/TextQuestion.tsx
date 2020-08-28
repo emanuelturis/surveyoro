@@ -28,7 +28,9 @@ const TextQuestion = ({
       onSubmit={(values) => {
         setStep(step + 1);
         setSubmission({
-          [question.id]: values[question.id],
+          questionId: question.id,
+          answerText: values[question.id],
+          answerId: null,
         });
       }}
       validationSchema={textQuestionValidationSchema}
