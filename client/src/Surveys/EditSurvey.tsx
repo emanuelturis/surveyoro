@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { ISurvey, IQuerySurveyArgs } from "../graphql-types";
-import { FaCaretLeft } from "react-icons/fa";
+import {
+  FaCaretLeft,
+  FaWindowMaximize,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
 import { css } from "@emotion/core";
 import EditableTitle from "../Shared/EditableTitle/EditableTitle";
 import Toggle from "react-toggle";
@@ -98,6 +102,26 @@ const EditSurvey: React.FC = () => {
               />
             </div>
             <div className="d-flex align-items-center">
+              <a
+                css={css`
+                  text-decoration: none;
+                `}
+                href={`http://localhost:3001/${id}`}
+                target="_blank"
+              >
+                <FaExternalLinkAlt
+                  css={css`
+                    font-size: 12.5px;
+                    margin-bottom: 5px;
+                    margin-right: 10px;
+                    cursor: pointer;
+                    opacity: 0.8;
+                    &:hover {
+                      opacity: 1;
+                    }
+                  `}
+                />
+              </a>
               <span
                 css={css`
                   margin-right: 5px;
