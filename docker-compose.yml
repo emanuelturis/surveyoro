@@ -44,7 +44,7 @@ services:
       context: ./app
     volumes:
       - "./app:/src/app"
-      - /src/client/node_modules
+      - /src/app/node_modules
     ports:
       - "3001:3001"
     networks:
