@@ -43,11 +43,14 @@ const Survey: React.FC = () => {
   const [step, setStep] = useState(0);
   const [submission, setSubmission] = useState([]);
 
-  const { data, loading } = useQuery<ISurveyData, IQuerySurveyArgs>(SURVEY, {
-    variables: {
-      id: `${id}`,
-    },
-  });
+  const { data, loading, error } = useQuery<ISurveyData, IQuerySurveyArgs>(
+    SURVEY,
+    {
+      variables: {
+        id: `${id}`,
+      },
+    }
+  );
 
   useEffect(() => {
     console.log(submission);
@@ -57,7 +60,7 @@ const Survey: React.FC = () => {
     return null;
   }
 
-  if (data && data.survey.active === false) {
+  if ((data && data.survey.active === false) || error) {
     return (
       <div
         css={css`
