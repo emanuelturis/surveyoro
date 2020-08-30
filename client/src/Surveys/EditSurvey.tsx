@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { ISurvey, IQuerySurveyArgs } from "../graphql-types";
 import {
@@ -50,6 +50,7 @@ interface ISurveyData {
 
 const EditSurvey: React.FC = () => {
   const history = useHistory();
+  const location = useLocation();
   const { id } = useParams();
 
   const [updateSurvey] = useMutation(UPDATE_SURVEY);
@@ -86,7 +87,9 @@ const EditSurvey: React.FC = () => {
                     opacity: 1;
                   }
                 `}
-                onClick={() => history.goBack()}
+                onClick={() =>
+                  history.push(location.pathname.replace(`/${id}`, ""))
+                }
               />
               <EditableTitle
                 title={data.survey.name}

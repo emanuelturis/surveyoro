@@ -1,7 +1,7 @@
 import React from "react";
 import { ISurvey } from "../graphql-types";
 import { ListGroup } from "react-bootstrap";
-import { FaTrash, FaPencilAlt } from "react-icons/fa";
+import { FaTrash, FaPencilAlt, FaChartLine } from "react-icons/fa";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
@@ -85,6 +85,9 @@ const Survey: React.FC<Props> = ({ survey }) => {
           }
         `}
       >
+        <FaChartLine
+          onClick={() => history.push(`/surveys/${survey.id}/stats`)}
+        />
         <FaPencilAlt onClick={() => history.push(`/surveys/${survey.id}`)} />
         <FaTrash
           className="text-danger"

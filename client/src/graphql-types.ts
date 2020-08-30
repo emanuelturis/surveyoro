@@ -7,6 +7,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Date custom scalar type */
+  Date: any;
 };
 
 export type IQuery = {
@@ -15,6 +17,7 @@ export type IQuery = {
   user: IUser;
   survey: ISurvey;
   question: IQuestion;
+  submissions: Array<ISubmission>;
 };
 
 
@@ -25,6 +28,11 @@ export type IQuerySurveyArgs = {
 
 export type IQueryQuestionArgs = {
   id: Scalars['ID'];
+};
+
+
+export type IQuerySubmissionsArgs = {
+  surveyId: Scalars['ID'];
 };
 
 export type IUser = {
@@ -60,6 +68,29 @@ export type IAnswer = {
   order: Scalars['Int'];
 };
 
+export type ISubmission = {
+  __typename?: 'Submission';
+  id: Scalars['ID'];
+  personId: Scalars['ID'];
+  person: IPerson;
+  questionId: Scalars['ID'];
+  question: IQuestion;
+  answerId?: Maybe<Scalars['ID']>;
+  answer?: Maybe<IAnswer>;
+  answerText: Scalars['String'];
+};
+
+export type IPerson = {
+  __typename?: 'Person';
+  id: Scalars['ID'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  answers: Array<IAnswer>;
+  createdAt: Scalars['Date'];
+};
+
+
 export type IMutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
@@ -76,6 +107,7 @@ export type IMutation = {
   updateAnswer: IAnswer;
   deleteAnswer: Scalars['Boolean'];
   reorderAnswers: Scalars['Boolean'];
+  addSubmission: Scalars['Boolean'];
 };
 
 
@@ -157,6 +189,13 @@ export type IMutationReorderAnswersArgs = {
   input: IReorderAnswersInput;
 };
 
+
+export type IMutationAddSubmissionArgs = {
+  person: IPersonInput;
+  submission: Array<ISubmissionInput>;
+  surveyId: Scalars['String'];
+};
+
 export type IRegisterInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -195,19 +234,14 @@ export type IReorderAnswersInput = {
   endIndex: Scalars['Int'];
 };
 
-export type IPerson = {
-  __typename?: 'Person';
-  id: Scalars['ID'];
+export type IPersonInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   email: Scalars['String'];
-  answers: Array<IAnswer>;
 };
 
-export type ISubmission = {
-  __typename?: 'Submission';
-  id: Scalars['ID'];
-  person: IPerson;
-  question: IQuestion;
-  answer: IAnswer;
+export type ISubmissionInput = {
+  questionId: Scalars['ID'];
+  answerId?: Maybe<Scalars['ID']>;
+  answerText: Scalars['String'];
 };

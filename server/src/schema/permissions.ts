@@ -31,6 +31,7 @@ export default shield(
   {
     Query: {
       user: isAuthenticated,
+      submissions: isAuthenticated,
     },
     Mutation: {
       createSurvey: isAuthenticated,

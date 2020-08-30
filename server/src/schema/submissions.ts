@@ -1,7 +1,12 @@
 import { gql } from "apollo-server-express";
-import { IMutationAddSubmissionArgs } from "../graphql-types";
+import {
+  IMutationAddSubmissionArgs,
+  IQuerySubmissionsArgs,
+} from "../graphql-types";
 import { Submission } from "../db/models/Submission";
 import { Person } from "../db/models/Person";
+import { MyContext } from "../my-types";
+import { Survey } from "../db/models/Survey";
 
 export const typeDef = gql`
   input PersonInput {
@@ -14,6 +19,10 @@ export const typeDef = gql`
     questionId: ID!
     answerId: ID
     answerText: String!
+  }
+
+  extend type Query {
+    submissions(surveyId: ID!): [Submission!]!
   }
 
   extend type Mutation {
@@ -54,6 +63,28 @@ export const resolvers = {
       await Submission.query().insert(data);
 
       return true;
+    },
+  },
+  Query: {
+    submissions: async (
+      _: any,
+      { surveyId }: IQuerySubmissionsArgs,
+      { user: { id: userId } }: MyContext
+    ) => {
+      const survey = await Survey.query().findOne({
+        id: surveyId,
+        userId,
+      });
+
+      return Submission.query()
+        .where({
+          surveyId: survey.id,
+        })
+        .withGraphFetched({
+          person: true,
+          question: true,
+          answer: true,
+        });
     },
   },
 };

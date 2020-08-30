@@ -16,6 +16,7 @@ import Register from "../Register";
 import { Container } from "react-bootstrap";
 import { css } from "@emotion/core";
 import EditSurvey from "../Surveys/EditSurvey";
+import Stats from "../Stats";
 
 const USER = gql`
   query User {
@@ -49,6 +50,7 @@ function App() {
               <Route exact path="/" component={Dashboard} />
               <Route exact path="/surveys" component={Surveys} />
               <Route exact path="/surveys/:id" component={EditSurvey} />
+              <Route exact path="/surveys/:id/stats" component={Stats} />
               <Route exact path="/settings" component={Settings} />
               <Route>
                 <Redirect to="/" />

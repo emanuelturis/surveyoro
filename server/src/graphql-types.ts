@@ -154,6 +154,7 @@ export type IQuery = {
   user: IUser;
   survey: ISurvey;
   question: IQuestion;
+  submissions: Array<ISubmission>;
 };
 
 
@@ -164,6 +165,11 @@ export type IQuerySurveyArgs = {
 
 export type IQueryQuestionArgs = {
   id: Scalars['ID'];
+};
+
+
+export type IQuerySubmissionsArgs = {
+  surveyId: Scalars['ID'];
 };
 
 export type IQuestion = {
@@ -321,6 +327,8 @@ export type IResolversTypes = {
   Question: ResolverTypeWrapper<IQuestion>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Answer: ResolverTypeWrapper<IAnswer>;
+  Submission: ResolverTypeWrapper<ISubmission>;
+  Person: ResolverTypeWrapper<IPerson>;
   Mutation: ResolverTypeWrapper<{}>;
   RegisterInput: IRegisterInput;
   LoginInput: ILoginInput;
@@ -330,8 +338,6 @@ export type IResolversTypes = {
   ReorderAnswersInput: IReorderAnswersInput;
   PersonInput: IPersonInput;
   SubmissionInput: ISubmissionInput;
-  Person: ResolverTypeWrapper<IPerson>;
-  Submission: ResolverTypeWrapper<ISubmission>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -345,6 +351,8 @@ export type IResolversParentTypes = {
   Question: IQuestion;
   Int: Scalars['Int'];
   Answer: IAnswer;
+  Submission: ISubmission;
+  Person: IPerson;
   Mutation: {};
   RegisterInput: IRegisterInput;
   LoginInput: ILoginInput;
@@ -354,8 +362,6 @@ export type IResolversParentTypes = {
   ReorderAnswersInput: IReorderAnswersInput;
   PersonInput: IPersonInput;
   SubmissionInput: ISubmissionInput;
-  Person: IPerson;
-  Submission: ISubmission;
 };
 
 export type IAnswerResolvers<ContextType = any, ParentType extends IResolversParentTypes['Answer'] = IResolversParentTypes['Answer']> = {
@@ -397,6 +403,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
   survey?: Resolver<IResolversTypes['Survey'], ParentType, ContextType, RequireFields<IQuerySurveyArgs, 'id'>>;
   question?: Resolver<IResolversTypes['Question'], ParentType, ContextType, RequireFields<IQueryQuestionArgs, 'id'>>;
+  submissions?: Resolver<Array<IResolversTypes['Submission']>, ParentType, ContextType, RequireFields<IQuerySubmissionsArgs, 'surveyId'>>;
 };
 
 export type IQuestionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Question'] = IResolversParentTypes['Question']> = {

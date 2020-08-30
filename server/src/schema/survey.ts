@@ -34,6 +34,7 @@ export const typeDef = gql`
     lastName: String!
     email: String!
     answers: [Answer!]!
+    createdAt: Date!
   }
 
   type Answer {
@@ -44,9 +45,13 @@ export const typeDef = gql`
 
   type Submission {
     id: ID!
+    personId: ID!
     person: Person!
+    questionId: ID!
     question: Question!
-    answer: String!
+    answerId: ID
+    answer: Answer
+    answerText: String!
   }
 
   extend type Query {
@@ -95,6 +100,7 @@ export const resolvers = {
       { user: { id: userId } }: MyContext
     ): Promise<Boolean> => {
       await Survey.query().delete().where("id", id).andWhere("userId", userId);
+
       return true;
     },
     updateSurvey: async (
