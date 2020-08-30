@@ -5,6 +5,7 @@ import { Model } from "objection";
 import knex from "./db/knex";
 import { applyMiddleware } from "graphql-middleware";
 import permissions from "./schema/permissions";
+import cors from "cors";
 
 Model.knex(knex);
 
@@ -17,8 +18,21 @@ const server = new ApolloServer({
 
 const app = express();
 
-server.applyMiddleware({ app });
+const port = process.env.PORT || 9000;
 
-app.listen({ port: 9000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:9000${server.graphqlPath}`)
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:3000",
+      process.env.APP_URL || "http://localhost:3001",
+    ],
+  })
+);
+
+server.applyMiddleware({ app, cors: false });
+
+app.listen({ port }, () =>
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  )
 );

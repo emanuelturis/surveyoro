@@ -14,9 +14,11 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.7",
     "@types/lodash": "^4.14.160",
     "apollo-server-express": "^2.16.1",
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "graphql-middleware": "^4.0.2",
     "graphql-shield": "^7.3.5",
