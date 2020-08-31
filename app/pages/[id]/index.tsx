@@ -60,7 +60,7 @@ const Survey: React.FC = () => {
     return null;
   }
 
-  if ((data && data.survey.active === false) || error) {
+  if ((data && data.survey.active === false || data && data.survey.questions.length === 0) || error) {
     return (
       <div
         css={css`
