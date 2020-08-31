@@ -109,7 +109,11 @@ const EditSurvey: React.FC = () => {
                 css={css`
                   text-decoration: none;
                 `}
-                href={`http://localhost:3001/${id}`}
+                href={
+                  process.env.NODE_ENV === "production"
+                    ? `https://surveyrus.com/${id}`
+                    : `http://localhost:3001/${id}`
+                }
                 target="_blank"
               >
                 <FaExternalLinkAlt

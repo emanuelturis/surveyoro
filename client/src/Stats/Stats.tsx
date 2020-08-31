@@ -8,7 +8,7 @@ import {
   IQuerySurveyArgs,
 } from "../graphql-types";
 import groupBy from "lodash/groupBy";
-import { Table } from "react-bootstrap";
+import { Table, Alert, ListGroup } from "react-bootstrap";
 import { FaCaretLeft, FaEye } from "react-icons/fa";
 import { css } from "@emotion/core";
 import PreviewModal from "./PreviewModal";
@@ -128,45 +128,64 @@ const Stats: React.FC = () => {
           />
           <h1>{surveyData.survey.name}</h1>
         </div>
-        <Table
-          bordered
-          css={css`
-            margin-top: 15px;
-          `}
-        >
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Submitted</th>
-              <th className="text-center">Preview</th>
-            </tr>
-          </thead>
-          <tbody>
-            {persons.map((personId) => (
-              <tr key={personId}>
-                <td>{personsSubmissions[personId][0].person.firstName}</td>
-                <td>{personsSubmissions[personId][0].person.lastName}</td>
-                <td>{personsSubmissions[personId][0].person.email}</td>
-                <td>
-                  {getDate(personsSubmissions[personId][0].person.createdAt)}
-                </td>
-                <td className="text-center">
-                  <FaEye
-                    css={css`
-                      cursor: pointer;
-                    `}
-                    onClick={() => {
-                      setSubmissions(personsSubmissions[personId]);
-                      setShow(true);
-                    }}
-                  />
-                </td>
+        {data.submissions.length === 0 ? (
+          <div>
+            <ListGroup.Item
+              css={css`
+                margin-top: 10px;
+              `}
+            >
+              <h4>No Stats Yet.</h4>
+              <p
+                css={css`
+                  margin: 0;
+                `}
+              >
+                You'll see stats here once people start answering your survey...
+              </p>
+            </ListGroup.Item>
+          </div>
+        ) : (
+          <Table
+            bordered
+            css={css`
+              margin-top: 15px;
+            `}
+          >
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email Address</th>
+                <th>Submitted</th>
+                <th className="text-center">Preview</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {persons.map((personId) => (
+                <tr key={personId}>
+                  <td>{personsSubmissions[personId][0].person.firstName}</td>
+                  <td>{personsSubmissions[personId][0].person.lastName}</td>
+                  <td>{personsSubmissions[personId][0].person.email}</td>
+                  <td>
+                    {getDate(personsSubmissions[personId][0].person.createdAt)}
+                  </td>
+                  <td className="text-center">
+                    <FaEye
+                      css={css`
+                        cursor: pointer;
+                      `}
+                      onClick={() => {
+                        setSubmissions(personsSubmissions[personId]);
+                        setShow(true);
+                      }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </div>
     );
   }

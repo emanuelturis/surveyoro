@@ -6,18 +6,9 @@ const Header: React.FC = () => {
   return (
     <div>
       <Navbar bg="primary" variant="dark">
-        <Navbar.Brand href="/">Surveyrus</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link as={NavLink} to="/" exact>
-            Dashboard
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/surveys" exact>
-            Surveys
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/settings" exact>
-            Settings
-          </Nav.Link>
-        </Nav>
+        <Navbar.Brand as={NavLink} to="/">
+          Surveyrus
+        </Navbar.Brand>
       </Navbar>
     </div>
   );

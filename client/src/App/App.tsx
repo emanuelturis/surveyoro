@@ -47,8 +47,7 @@ function App() {
             `}
           >
             <Switch>
-              <Route exact path="/" component={Dashboard} />
-              <Route exact path="/surveys" component={Surveys} />
+              <Route exact path="/" component={Surveys} />
               <Route exact path="/surveys/:id" component={EditSurvey} />
               <Route exact path="/surveys/:id/stats" component={Stats} />
               <Route exact path="/settings" component={Settings} />
