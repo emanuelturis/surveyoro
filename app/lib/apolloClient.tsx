@@ -7,7 +7,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: process.env.SERVER_URL || "http://localhost:9000/graphql", // Server URL (must be absolute)
+      uri: process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:9000/graphql", // Server URL (must be absolute)
     }),
     cache: new InMemoryCache(),
   });
