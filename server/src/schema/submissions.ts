@@ -7,6 +7,7 @@ import { Submission } from "../db/models/Submission";
 import { Person } from "../db/models/Person";
 import { MyContext } from "../my-types";
 import { Survey } from "../db/models/Survey";
+import joi from "@hapi/joi";
 
 export const typeDef = gql`
   input PersonInput {
@@ -44,6 +45,36 @@ export const resolvers = {
         surveyId,
       }: IMutationAddSubmissionArgs
     ): Promise<Boolean> => {
+      try {
+        await joi
+          .object({
+            submission: joi.array().items(
+              joi.object({
+                questionId: joi.string().required(),
+                answerId: joi.string(),
+                answerText: joi.string().required(),
+              })
+            ),
+            person: joi.object({
+              firstName: joi.string().required(),
+              lastName: joi.string().required(),
+              email: joi.string().required(),
+            }),
+            surveyId: joi.string().required(),
+          })
+          .validateAsync({
+            submission,
+            person: {
+              firstName,
+              lastName,
+              email,
+            },
+            surveyId,
+          });
+      } catch (error) {
+        throw error;
+      }
+
       const person = await Person.query()
         .insert({
           firstName,

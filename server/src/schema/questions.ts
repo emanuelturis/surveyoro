@@ -9,6 +9,7 @@ import {
 import { MyContext } from "../my-types";
 import { Question } from "../db/models/Question";
 import { Survey } from "../db/models/Survey";
+import joi from "@hapi/joi";
 
 export const typeDef = gql`
   extend type Query {
@@ -42,6 +43,22 @@ export const resolvers = {
       { surveyId, type, order }: IMutationCreateQuestionArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Question> => {
+      try {
+        await joi
+          .object({
+            surveyId: joi.string().required(),
+            type: joi.string().required(),
+            order: joi.number().required(),
+          })
+          .validateAsync({
+            surveyId,
+            type,
+            order,
+          });
+      } catch (error) {
+        throw error;
+      }
+
       const survey = await Survey.query().findOne({
         id: surveyId,
         userId,
@@ -63,6 +80,20 @@ export const resolvers = {
       { user: { id: userId } }: MyContext
     ) => {
       try {
+        await joi
+          .object({
+            id: joi.string().required(),
+            surveyId: joi.string().required(),
+          })
+          .validateAsync({
+            id,
+            surveyId,
+          });
+      } catch (error) {
+        throw error;
+      }
+
+      try {
         const survey = await Survey.query().findOne({
           userId,
           id: surveyId,
@@ -81,6 +112,22 @@ export const resolvers = {
       { id, surveyId, text }: IMutationUpdateQuestionArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Question> => {
+      try {
+        await joi
+          .object({
+            id: joi.string().required(),
+            surveyId: joi.string().required(),
+            text: joi.string().required(),
+          })
+          .validateAsync({
+            id,
+            surveyId,
+            text,
+          });
+      } catch (error) {
+        throw error;
+      }
+
       const survey = await Survey.query().findOne({
         userId,
         id: surveyId,
@@ -101,6 +148,33 @@ export const resolvers = {
       }: IMutationReorderQuestionsArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Boolean> => {
+      try {
+        await joi
+          .object({
+            input: joi.object({
+              startIndex: joi.number().required(),
+              endIndex: joi.number().required(),
+              indexedIds: joi.array().items(
+                joi.object({
+                  id: joi.string().required(),
+                  index: joi.number().required(),
+                })
+              ),
+              surveyId: joi.string().required(),
+            }),
+          })
+          .validateAsync({
+            input: {
+              startIndex,
+              endIndex,
+              indexedIds,
+              surveyId,
+            },
+          });
+      } catch (error) {
+        throw error;
+      }
+
       if (startIndex !== endIndex) {
         const trx = await Question.startTransaction();
 

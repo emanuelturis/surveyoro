@@ -11,6 +11,7 @@ import { Survey } from "../db/models/Survey";
 import { Question } from "../db/models/Question";
 import { MyContext } from "../my-types";
 import { Answer } from "../db/models/Answer";
+import joi from "@hapi/joi";
 
 export const typeDef = gql`
   type Survey {
@@ -87,6 +88,15 @@ export const resolvers = {
       { name }: IMutationCreateSurveyArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Survey> => {
+      try {
+        await joi
+          .object({
+            name: joi.string().required(),
+          })
+          .validateAsync({ name });
+      } catch (error) {
+        throw error;
+      }
       return Survey.query()
         .insert({
           name,
@@ -99,6 +109,18 @@ export const resolvers = {
       { id }: IMutationDeleteSurveyArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Boolean> => {
+      try {
+        await joi
+          .object({
+            id: joi.string().required(),
+          })
+          .validateAsync({
+            id,
+          });
+      } catch (error) {
+        throw error;
+      }
+
       await Survey.query().delete().where("id", id).andWhere("userId", userId);
 
       return true;
@@ -108,6 +130,22 @@ export const resolvers = {
       { id, name, active }: IMutationUpdateSurveyArgs,
       { user: { id: userId } }: MyContext
     ): Promise<Survey> => {
+      try {
+        await joi
+          .object({
+            id: joi.string().required(),
+            name: joi.string().required(),
+            active: joi.boolean().required(),
+          })
+          .validateAsync({
+            id,
+            name,
+            active,
+          });
+      } catch (error) {
+        throw error;
+      }
+
       return Survey.query()
         .update({
           name,

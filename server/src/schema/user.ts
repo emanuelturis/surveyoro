@@ -9,6 +9,7 @@ import { User } from "../db/models/User";
 import bcrypt from "bcrypt";
 import { createToken } from "../utils/auth";
 import { Survey } from "../db/models/Survey";
+import joi from "@hapi/joi";
 
 export const typeDef = gql`
   type User {
@@ -62,6 +63,19 @@ export const resolvers = {
       _: any,
       { input: { firstName, lastName, email, password } }: IMutationRegisterArgs
     ): Promise<Boolean> => {
+      try {
+        await joi
+          .object({
+            firstName: joi.string().required(),
+            lastName: joi.string().required(),
+            email: joi.string().email().required(),
+            password: joi.string().required(),
+          })
+          .validateAsync({ firstName, lastName, email, password });
+      } catch (error) {
+        throw error;
+      }
+
       const existing = await User.query()
         .select("email")
         .where("email", email)
@@ -90,6 +104,17 @@ export const resolvers = {
       _: any,
       { input: { email, password } }: IMutationLoginArgs
     ) => {
+      try {
+        await joi
+          .object({
+            email: joi.string().email().required(),
+            password: joi.string().required(),
+          })
+          .validateAsync({ email, password });
+      } catch (error) {
+        throw error;
+      }
+
       const user = await User.query().findOne({ email });
 
       if (!user) {
