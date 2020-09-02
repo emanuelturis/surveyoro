@@ -51,7 +51,7 @@ export const resolvers = {
             submission: joi.array().items(
               joi.object({
                 questionId: joi.string().required(),
-                answerId: joi.string(),
+                answerId: joi.string().required().allow(null),
                 answerText: joi.string().required(),
               })
             ),
