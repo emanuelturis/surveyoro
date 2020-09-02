@@ -52,10 +52,6 @@ const Survey: React.FC = () => {
     }
   );
 
-  useEffect(() => {
-    console.log(submission);
-  }, [submission]);
-
   if (loading) {
     return null;
   }

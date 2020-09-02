@@ -31,11 +31,6 @@ const Finished: React.FC<Props> = ({ submission, steps }) => {
         submission: submission.slice(1),
       },
     });
-    console.log({
-      surveyId: `${id}`,
-      person: submission[0],
-      submission: submission.slice(1),
-    });
   }, [submission]);
 
   return (
