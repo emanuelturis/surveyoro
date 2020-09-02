@@ -32,7 +32,7 @@ const Header: React.FC = () => {
     },
     {
       text: "Login",
-      url: "https://app.surveyrus.com/login",
+      url: "https://app.surveyoro.com/login",
     },
   ];
   return (
@@ -63,7 +63,7 @@ const Header: React.FC = () => {
             }
           `}
         >
-          <Link href="/">surveyrus</Link>
+          <Link href="/">surveyoro</Link>
         </h1>
         <div
           css={css`
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
             align-items: center;
           `}
         >
-          <Button href="https://app.surveyrus.com/register">
+          <Button href="https://app.surveyoro.com/register">
             Register For Free
           </Button>
         </div>

@@ -7,7 +7,7 @@ const Header: React.FC = () => {
     <div>
       <Navbar bg="primary" variant="dark">
         <Navbar.Brand as={NavLink} to="/">
-          Surveyrus
+          Surveyoro
         </Navbar.Brand>
       </Navbar>
     </div>

@@ -6,12 +6,12 @@ const Features: React.FC = () => {
   const features = [
     {
       title: "Quick Feedback.",
-      description: `Knowing your audience is key. With Surveyrus you can quickly get feedback with an easy to use interface that allows you to quickly build and visualize your survey.`,
-      image: "/surveyrus.png",
+      description: `Knowing your audience is key. With Surveyoro you can quickly get feedback with an easy to use interface that allows you to quickly build and visualize your survey.`,
+      image: "/surveyoro.png",
     },
     {
       title: "Ease Of Use.",
-      description: `Surveyrus is an easy to use platform that helps you get your surveys out quickly.`,
+      description: `Surveyoro is an easy to use platform that helps you get your surveys out quickly.`,
       image: "/draganddrop.png",
     },
     {
@@ -85,7 +85,7 @@ const Features: React.FC = () => {
           <div>
             <h3>{feature.title}</h3>
             <p>{feature.description}</p>
-            <Button href="https://app.surveyrus.com/register">
+            <Button href="https://app.surveyoro.com/register">
               Register For Free
             </Button>
           </div>

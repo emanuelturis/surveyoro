@@ -29,7 +29,7 @@ export default function Home() {
       `}
     >
       <Head>
-        <title>Surveyrus</title>
+        <title>Surveyoro</title>
         <link rel="icon" href="/favicon.ico" />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
@@ -65,7 +65,7 @@ export default function Home() {
                 opacity: 1;
               }
             `}
-            href="https://app.surveyrus.com/register"
+            href="https://app.surveyoro.com/register"
           >
             Create A Free Account
           </Button>
@@ -87,10 +87,10 @@ export default function Home() {
         <div>
           <h4>Create A Free Account </h4>
           <p>
-            Click below to create a new Surveyrus account and start getting
+            Click below to create a new Surveyoro account and start getting
             feedback from your audience today.
           </p>
-          <Button href="https://app.surveyrus.com/register">
+          <Button href="https://app.surveyoro.com/register">
             Register For Free
           </Button>
         </div>
@@ -102,7 +102,7 @@ export default function Home() {
           padding: 35px;
         `}
       >
-        © {new Date().getFullYear()} | Surveyrus
+        © {new Date().getFullYear()} | Surveyoro
         {` `}
       </footer>
     </div>

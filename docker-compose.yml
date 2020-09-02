@@ -10,13 +10,13 @@ services:
     ports:
       - "9000:9000"
     networks:
-      - surveyrus
+      - surveyoro
     environment:
       - NODE_ENV=development
       - PORT=9000
       - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=surveyrus_development
+      - POSTGRES_DB=surveyoro_development
       - POSTGRES_HOST=postgres
       - DEBUG=knex*
     command: npm run start
@@ -32,7 +32,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - surveyrus
+      - surveyoro
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -48,7 +48,7 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - surveyrus
+      - surveyoro
     environment:
       - NODE_ENV=development
     command: npx next dev -p 3001
@@ -61,10 +61,10 @@ services:
     environment:
       POSTGRES_USER: "username"
       POSTGRES_PASSWORD: "password"
-      POSTGRES_DB: "surveyrus_development"
+      POSTGRES_DB: "surveyoro_development"
       POSTGRES_HOST: "postgres"
     networks:
-      - surveyrus
+      - surveyoro
 
   pgadmin:
     image: dpage/pgadmin4
@@ -74,7 +74,7 @@ services:
     ports:
       - "55684:80"
     networks:
-      - surveyrus
+      - surveyoro
 
 networks:
-  surveyrus:
+  surveyoro:

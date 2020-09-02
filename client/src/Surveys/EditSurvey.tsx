@@ -111,7 +111,7 @@ const EditSurvey: React.FC = () => {
                 `}
                 href={
                   process.env.NODE_ENV === "production"
-                    ? `https://surveyrus.com/${id}`
+                    ? `https://surveyoro.com/${id}`
                     : `http://localhost:3001/${id}`
                 }
                 target="_blank"

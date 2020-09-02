@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../db/models/User";
 
-const secret = "surveyrus";
+const secret = "surveyoro";
 
 interface IUser {
   id: string;

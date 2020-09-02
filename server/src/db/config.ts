@@ -24,7 +24,7 @@ export = {
     connection: {
       host: "postgres",
       port: "5432",
-      database: "surveyrus_test",
+      database: "surveyoro_test",
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
     },
