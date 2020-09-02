@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IQuestion } from "../../graphql-types";
 import { Form, Button } from "react-bootstrap";
 import { IActions } from "../Question/Question";
+import { FormCheckbox, SubmitButton } from "../Shared/Form";
 
 interface Props {
   question: IQuestion;
@@ -16,13 +17,12 @@ const CheckQuestion = ({
 
   return (
     <div>
-      <p>{question.text}</p>
+      <h3>{question.text}</h3>
       {question.answers.map((answer) => (
-        <Form.Check
+        <FormCheckbox
           key={answer.id}
-          type="checkbox"
           checked={checked.includes(answer)}
-          onChange={() => {
+          onClick={() => {
             if (checked.includes(answer)) {
               return setChecked((checked) => {
                 return checked.filter(({ id }) => id !== answer.id);
@@ -35,7 +35,7 @@ const CheckQuestion = ({
           label={answer.text}
         />
       ))}
-      <Button
+      <SubmitButton
         onClick={() => {
           if (checked.length === 0) {
             return;
@@ -51,7 +51,7 @@ const CheckQuestion = ({
         }}
       >
         {steps === step ? "Finish Survey" : "Next Question"}
-      </Button>
+      </SubmitButton>
     </div>
   );
 };

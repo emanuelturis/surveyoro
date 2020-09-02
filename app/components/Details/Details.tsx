@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
-import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
+import { FormControl, FormikForm, SubmitButton } from "../Shared/Form";
 
 interface Props {
   step: number;
@@ -31,10 +32,9 @@ const Details: React.FC<Props> = ({ step, steps, setStep, setSubmission }) => {
     >
       {() => (
         <FormikForm>
-          <h1>Details</h1>
+          <h3>Details</h3>
           <Form.Label>First Name</Form.Label>
-          <Form.Control
-            as={Field}
+          <FormControl
             type="text"
             name="firstName"
             placeholder="Enter your first name..."
@@ -45,22 +45,20 @@ const Details: React.FC<Props> = ({ step, steps, setStep, setSubmission }) => {
             className="text-danger"
           />
           <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            as={Field}
+          <FormControl
             type="text"
             name="lastName"
             placeholder="Enter your last name..."
           />
           <ErrorMessage component="p" name="lastName" className="text-danger" />
           <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            as={Field}
+          <FormControl
             type="text"
             name="email"
             placeholder="Enter your email address..."
           />
           <ErrorMessage component="p" name="email" className="text-danger" />
-          <Button type="submit">Start Survey</Button>
+          <SubmitButton type="submit">Start Survey</SubmitButton>
         </FormikForm>
       )}
     </Formik>

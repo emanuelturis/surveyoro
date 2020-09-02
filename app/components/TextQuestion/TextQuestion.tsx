@@ -4,6 +4,8 @@ import { IQuestion } from "../../graphql-types";
 import { Formik, Field, Form as FormikForm, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { IActions } from "../Question/Question";
+import styled from "@emotion/styled";
+import { FormControl, SubmitButton } from "../Shared/Form";
 
 interface Props {
   question: IQuestion;
@@ -36,16 +38,16 @@ const TextQuestion = ({
       validationSchema={textQuestionValidationSchema}
     >
       <FormikForm>
-        {question.text}
-        <Form.Control as={Field} type="text" name={question.id} />
+        <h3>{question.text}</h3>
+        <FormControl as={Field} type="text" name={question.id} />
         <ErrorMessage
           component="p"
           className="text-danger"
           name={question.id}
         />
-        <Button type="submit">
+        <SubmitButton type="submit">
           {step === steps ? "Finish Survey" : "Next Question"}
-        </Button>
+        </SubmitButton>
       </FormikForm>
     </Formik>
   );

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { IQuestion } from "../../graphql-types";
 import { Form, Button } from "react-bootstrap";
 import { IActions } from "../Question/Question";
+import { FormRadio, SubmitButton } from "../Shared/Form";
+import { css } from "@emotion/core";
 
 interface Props {
   question: IQuestion;
@@ -21,17 +23,23 @@ const RadioQuestion = ({
 
   return (
     <div>
-      <p>{question.text}</p>
+      <h3>{question.text}</h3>
       {question.answers.map((answer) => (
-        <Form.Check
-          key={answer.id}
-          type="radio"
-          checked={checked === answer}
-          onChange={() => setChecked(answer)}
-          label={answer.text}
-        />
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <FormRadio
+            key={answer.id}
+            checked={checked === answer}
+            onClick={() => setChecked(answer)}
+            label={answer.text}
+          />
+        </div>
       ))}
-      <Button
+      <SubmitButton
         onClick={() => {
           if (!checked) {
             return;
@@ -45,7 +53,7 @@ const RadioQuestion = ({
         }}
       >
         {step === steps ? "Finish Survey" : "Next Question"}
-      </Button>
+      </SubmitButton>
     </div>
   );
 };

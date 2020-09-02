@@ -6,7 +6,7 @@ import Layout from "../../components/Layout/Layout";
 import Question from "../../components/Question";
 import { useState, useEffect } from "react";
 import Details from "../../components/Details";
-import { Button } from "react-bootstrap";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import { css } from "@emotion/core";
 import Finished from "../../components/Finished";
 
@@ -107,20 +107,29 @@ const Survey: React.FC = () => {
   ];
 
   return (
-    <div
+    <Container
+      fluid
       css={css`
-        button {
-          margin-top: 15px;
-        }
+        background-color: #eaeaea;
       `}
     >
       {data && (
-        <Layout>
-          <Title>{data.survey.name}</Title>
-          {steps[step]}
-        </Layout>
+        <Row className="justify-content-md-center">
+          <Col
+            css={css`
+              padding: 25px 0px;
+              @media (max-width: 768px) {
+                padding: 25px 1em;
+              }
+            `}
+            sm={8}
+          >
+            <Title>{data.survey.name}</Title>
+            {steps[step]}
+          </Col>
+        </Row>
       )}
-    </div>
+    </Container>
   );
 };
 

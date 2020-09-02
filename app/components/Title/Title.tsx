@@ -1,7 +1,8 @@
 import React from "react";
+import styled from "@emotion/styled";
 
-const Title: React.FC = ({ children }) => {
-  return <h1>{children}</h1>;
-};
+const Title = styled.h1`
+  font-weight: 600;
+`;
 
 export default Title;
