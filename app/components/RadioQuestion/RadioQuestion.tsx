@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { IQuestion } from "../../graphql-types";
-import { Form, Button } from "react-bootstrap";
 import { IActions } from "../Question/Question";
 import { FormRadio, SubmitButton } from "../Shared/Form";
 import { css } from "@emotion/core";

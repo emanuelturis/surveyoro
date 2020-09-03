@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -17,7 +17,9 @@ const ADD_SUBMISSION = gql`
   }
 `;
 
-const Finished: React.FC<Props> = ({ submission, steps }) => {
+const Finished: React.FC<Props> = ({ submission }) => {
+  const [submitted, setSubmitted] = useState(false);
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -30,13 +32,19 @@ const Finished: React.FC<Props> = ({ submission, steps }) => {
         person: submission[0],
         submission: submission.slice(1),
       },
-    });
-  }, [submission]);
+    }).then(() => setSubmitted(true));
+  }, []);
 
   return (
     <div>
-      <h3>Thank You!</h3>
-      <p>Your survey was successfully submitted.</p>
+      {submitted ? (
+        <div>
+          <h3>Thank You!</h3>
+          <p>Your survey was successfully submitted.</p>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
