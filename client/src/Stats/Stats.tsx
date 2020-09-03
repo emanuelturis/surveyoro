@@ -17,10 +17,11 @@ import BackToDashboard from "../Shared/BackToDashboard";
 import { ListItem } from "../Shared/ListItem";
 import { Icon } from "../Shared/Icon";
 import ReactTooltip from "react-tooltip";
+import { Button } from "../Shared/Button";
 
 const SUBMISSIONS = gql`
-  query Submissions($surveyId: ID!) {
-    submissions(surveyId: $surveyId) {
+  query Submissions($surveyId: ID!, $offset: Int!) {
+    submissions(surveyId: $surveyId, offset: $offset) {
       id
       personId
       questionId
@@ -74,14 +75,15 @@ const Stats: React.FC = () => {
 
   const [submissions, setSubmissions] = useState<ISubmission[] | null>(null);
 
-  const { data, loading } = useQuery<ISubmissionsData, IQuerySubmissionsArgs>(
-    SUBMISSIONS,
-    {
-      variables: {
-        surveyId: id,
-      },
-    }
-  );
+  const { data, loading, fetchMore } = useQuery<
+    ISubmissionsData,
+    IQuerySubmissionsArgs
+  >(SUBMISSIONS, {
+    variables: {
+      surveyId: id,
+      offset: 0,
+    },
+  });
 
   const { data: surveyData, loading: surveyLoading } = useQuery<
     ISurveyData,
@@ -183,6 +185,31 @@ const Stats: React.FC = () => {
             ))}
           </ListGroup>
         )}
+        <Button
+          type="button"
+          css={css`
+            margin-top: 25px;
+          `}
+          onClick={() =>
+            fetchMore({
+              variables: {
+                surveyId: id,
+                offset: persons.length,
+              },
+              updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                if (!fetchMoreResult) return prev;
+                return Object.assign({}, prev, {
+                  submissions: [
+                    ...prev.submissions,
+                    ...fetchMoreResult.submissions,
+                  ],
+                });
+              },
+            })
+          }
+        >
+          Load More
+        </Button>
       </div>
     );
   }

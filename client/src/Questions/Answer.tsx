@@ -10,7 +10,6 @@ import {
   DraggableStateSnapshot,
 } from "react-beautiful-dnd";
 import { Icon } from "../Shared/Icon";
-import styled from "@emotion/styled";
 import UpdateFieldModal from "../Shared/UpdateFieldModal";
 
 interface Props {
@@ -159,8 +158,15 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
               <Icon onClick={() => setShowModal(true)}>
                 <FaPencilAlt />
               </Icon>
-              <Icon onClick={() => deleteAnswer()}>
-                <FaTrash className="text-danger" />
+              <Icon
+                css={css`
+                  svg {
+                    color: #ff3232;
+                  }
+                `}
+                onClick={() => deleteAnswer()}
+              >
+                <FaTrash />
               </Icon>
               <Icon {...provided.dragHandleProps}>
                 <FaGripLines />

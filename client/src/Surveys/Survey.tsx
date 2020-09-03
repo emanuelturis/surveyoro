@@ -128,8 +128,15 @@ const Survey: React.FC<Props> = ({ survey }) => {
         <Icon onClick={() => history.push(`/surveys/${survey.id}`)}>
           <FaPencilAlt />
         </Icon>
-        <Icon onClick={() => setShowDeleteModal(true)}>
-          <FaTrash className="text-danger" />
+        <Icon
+          css={css`
+            svg {
+              color: #ff3232;
+            }
+          `}
+          onClick={() => setShowDeleteModal(true)}
+        >
+          <FaTrash />
         </Icon>
       </div>
     </ListItem>

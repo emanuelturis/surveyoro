@@ -23,7 +23,7 @@ export const typeDef = gql`
   }
 
   extend type Query {
-    submissions(surveyId: ID!): [Submission!]!
+    submissions(surveyId: ID!, offset: Int!): [Submission!]!
   }
 
   extend type Mutation {
@@ -80,6 +80,7 @@ export const resolvers = {
           firstName,
           lastName,
           email,
+          surveyId,
         })
         .returning("id");
 
@@ -99,16 +100,28 @@ export const resolvers = {
   Query: {
     submissions: async (
       _: any,
-      { surveyId }: IQuerySubmissionsArgs,
+      { surveyId, offset }: IQuerySubmissionsArgs,
       { user: { id: userId } }: MyContext
     ) => {
-      const survey = await Survey.query().findOne({
-        id: surveyId,
-        userId,
-      });
+      const survey = await Survey.query()
+        .findOne({
+          id: surveyId,
+          userId,
+        })
+        .returning("id");
+
+      const persons = await Person.query()
+        .limit(5)
+        .offset(offset)
+        .where("surveyId", survey.id)
+        .orderBy("createdAt", "asc");
 
       return Submission.query()
-        .where({
+        .whereIn(
+          "personId",
+          persons.map(({ id }) => id)
+        )
+        .andWhere({
           surveyId: survey.id,
         })
         .withGraphFetched({

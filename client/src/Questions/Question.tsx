@@ -195,8 +195,15 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
                   <Icon onClick={() => setShowModal(true)}>
                     <FaPencilAlt />
                   </Icon>
-                  <Icon onClick={() => deleteQuestion()}>
-                    <FaTrash className="text-danger" />
+                  <Icon
+                    css={css`
+                      svg {
+                        color: #ff3232;
+                      }
+                    `}
+                    onClick={() => deleteQuestion()}
+                  >
+                    <FaTrash />
                   </Icon>
                   <Icon {...provided.dragHandleProps}>
                     <FaGripLines />
