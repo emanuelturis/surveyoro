@@ -16,6 +16,7 @@ import { Icon } from "../Shared/Icon";
 import { Title } from "../Shared/Title";
 import BackToDashboard from "../Shared/BackToDashboard";
 import ReactTooltip from "react-tooltip";
+import UpdateFieldModal from "../Shared/UpdateFieldModal";
 
 const SURVEY = gql`
   query Survey($id: ID!) {
@@ -57,6 +58,8 @@ const EditSurvey: React.FC = () => {
   const location = useLocation();
   const { id } = useParams();
 
+  const [showModal, setShowModal] = useState(false);
+
   const [updateSurvey] = useMutation(UPDATE_SURVEY);
 
   const { data, loading, error } = useQuery<ISurveyData, IQuerySurveyArgs>(
@@ -93,7 +96,41 @@ const EditSurvey: React.FC = () => {
               }
             `}
           >
-            <Title>{data.survey.name}</Title>
+            <UpdateFieldModal
+              show={showModal}
+              handleClose={() => setShowModal(false)}
+              type="Survey Title"
+              initialValue={data.survey.name}
+              handleSubmit={(name: string) => {
+                updateSurvey({
+                  variables: {
+                    id,
+                    name,
+                    active: data.survey.active,
+                  },
+                });
+                setShowModal(false);
+              }}
+            />
+            <ReactTooltip
+              id="title"
+              backgroundColor="rgba(57, 62, 70, 1)"
+              textColor="rgba(238, 238, 238, 1)"
+              effect="solid"
+              delayShow={500}
+            >
+              Update Survey Title
+            </ReactTooltip>
+            <Title
+              css={css`
+                cursor: pointer;
+              `}
+              data-for="title"
+              data-tip="titla"
+              onClick={() => setShowModal(true)}
+            >
+              {data.survey.name}
+            </Title>
             <div className="d-flex align-items-center">
               <a
                 css={css`
