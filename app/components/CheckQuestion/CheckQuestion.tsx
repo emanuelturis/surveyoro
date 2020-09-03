@@ -46,14 +46,12 @@ const CheckQuestion = ({
             if (checked.length === 0) {
               return;
             }
-            setStep(step + 1);
-            checked.map((c) => {
-              setSubmission({
-                questionId: question.id,
-                answerId: c.id,
-                answerText: c.text,
-              });
-            });
+            const submission = checked.map((c) => ({
+              questionId: question.id,
+              answerId: c.id,
+              answerText: c.text,
+            }));
+            setSubmission(submission);
           }}
         >
           {steps === step ? "Finish Survey" : "Next Question"}

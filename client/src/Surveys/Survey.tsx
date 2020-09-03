@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { ISurvey } from "../graphql-types";
 import { ListGroup } from "react-bootstrap";
 import { FaTrash, FaPencilAlt, FaChartLine } from "react-icons/fa";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
+import { Icon } from "../Shared/Icon";
+import { ListItem } from "../Shared/ListItem";
+import DeleteModal from "../Shared/DeleteModal";
 
 interface Props {
   survey: ISurvey;
@@ -18,6 +21,8 @@ const DELETE_SURVEY = gql`
 
 const Survey: React.FC<Props> = ({ survey }) => {
   const history = useHistory();
+
+  const [showDeleteModa, setShowDeleteModal] = useState(false);
 
   const [deleteSurvey] = useMutation(DELETE_SURVEY, {
     update: (cache) => {
@@ -70,37 +75,64 @@ const Survey: React.FC<Props> = ({ survey }) => {
   });
 
   return (
-    <ListGroup.Item className="d-flex justify-content-between">
-      <div>{survey.name}</div>
+    <ListItem
+      css={css`
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @media (max-width: 768px) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      `}
+    >
+      <p
+        css={css`
+          margin: 0;
+        `}
+      >
+        {survey.name}
+      </p>
+      <DeleteModal
+        show={showDeleteModa}
+        handleClose={() => setShowDeleteModal(false)}
+        handleDelete={() =>
+          deleteSurvey({
+            variables: {
+              id: survey.id,
+            },
+          })
+        }
+        type="Survey"
+        name={survey.name}
+      />
       <div
         css={css`
-          svg {
-            font-size: 15px;
-            opacity: 0.8;
-            margin-left: 15px;
-            cursor: pointer;
-            &:hover {
-              opacity: 1;
+          display: flex;
+          align-items: center;
+          ${Icon} {
+            margin-left: 8px;
+          }
+          @media (max-width: 768px) {
+            ${Icon} {
+              margin-left: 0px;
+              margin-right: 8px;
+              margin-top: 10px;
             }
           }
         `}
       >
-        <FaChartLine
-          onClick={() => history.push(`/surveys/${survey.id}/stats`)}
-        />
-        <FaPencilAlt onClick={() => history.push(`/surveys/${survey.id}`)} />
-        <FaTrash
-          className="text-danger"
-          onClick={() =>
-            deleteSurvey({
-              variables: {
-                id: survey.id,
-              },
-            })
-          }
-        />
+        <Icon onClick={() => history.push(`/surveys/${survey.id}/stats`)}>
+          <FaChartLine />
+        </Icon>
+        <Icon onClick={() => history.push(`/surveys/${survey.id}`)}>
+          <FaPencilAlt />
+        </Icon>
+        <Icon onClick={() => setShowDeleteModal(true)}>
+          <FaTrash className="text-danger" />
+        </Icon>
       </div>
-    </ListGroup.Item>
+    </ListItem>
   );
 };
 

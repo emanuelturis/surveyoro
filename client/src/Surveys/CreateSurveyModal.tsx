@@ -1,6 +1,8 @@
 import React from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
+import { Modal, Form } from "react-bootstrap";
+import { FormControl, FormError } from "../Shared/Form";
+import { Button } from "../Shared/Button";
+import { Form as FormikForm, Formik } from "formik";
 import * as yup from "yup";
 import { gql, useMutation } from "@apollo/client";
 
@@ -101,31 +103,28 @@ const CreateSurveyModal: React.FC<Props> = ({ show, handleClose }) => {
               </Modal.Header>
               <Modal.Body>
                 <Form.Label>Name</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="text"
                   name="name"
                   placeholder="Enter your new survey's name..."
                 />
-                <ErrorMessage
-                  name="name"
-                  component="p"
-                  className="text-danger"
-                />
+                <FormError name="name" component="p" className="text-danger" />
               </Modal.Body>
               <Modal.Footer>
                 <Button
-                  variant="secondary"
+                  size="medium"
                   onClick={() => {
                     handleClose();
                     resetForm();
                   }}
+                  type="button"
+                  variant="cancel"
                 >
                   Cancel
                 </Button>
                 <Button
-                  variant="primary"
                   type="submit"
+                  size="medium"
                   disabled={isSubmitting || !(isValid && dirty)}
                 >
                   Create New Survey

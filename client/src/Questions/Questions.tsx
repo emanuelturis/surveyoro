@@ -1,11 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { IQuestion } from "../graphql-types";
 import Question from "./Question";
-import { Button, ListGroup, Dropdown } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import { css } from "@emotion/core";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { FaListUl, FaKeyboard, FaRegCircle } from "react-icons/fa";
+import { Button } from "../Shared/Button";
+import Dropdown from "../Shared/Dropdown";
+import OnClickOutside from "../Shared/OnClickOutside";
+import { FaListUl, FaRegCircle, FaKeyboard } from "react-icons/fa";
+import { ListItem } from "../Shared/ListItem";
+import { SubTitle } from "../Shared/Title";
 
 interface Props {
   questions: IQuestion[];
@@ -30,6 +35,8 @@ const REORDER_QUESTIONS = gql`
 `;
 
 const Questions: React.FC<Props> = ({ questions, surveyId }) => {
+  const [dropdown, setDropdown] = useState(false);
+
   const [createQuestion] = useMutation(CREATE_QUESTION, {
     update: (cache, response) => {
       const data: any = cache.readQuery({
@@ -191,78 +198,88 @@ const Questions: React.FC<Props> = ({ questions, surveyId }) => {
   };
 
   return (
-    <ListGroup
-      css={css`
-        margin-top: 15px;
-      `}
-    >
+    <ListGroup>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div>
-          {questions.length === 0 ? (
-            <ListGroup.Item>
-              <h3>No Questions Are Available.</h3>
-              <p className="text-secondary">
-                Click below to add the first question to this survey.
-              </p>
-              <Button onClick={() => handleCreateQuestion("radio")}>
-                Add First Question
-              </Button>
-            </ListGroup.Item>
-          ) : (
-            <Droppable
-              droppableId={`droppable-survey-${surveyId}`}
-              type="SURVEY"
-            >
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {questions.map((question) => (
-                    <Question
-                      key={question.id}
-                      question={question}
-                      surveyId={surveyId}
-                    />
-                  ))}
-                  {provided.placeholder}
-                  <Dropdown
+        {questions.length === 0 ? (
+          <ListItem
+            css={css`
+              margin-top: 25px;
+            `}
+          >
+            <SubTitle>No Questions Are Available.</SubTitle>
+            <p className="text-secondary">
+              Click below to add the first question to this survey.
+            </p>
+            <Button onClick={() => handleCreateQuestion("radio")}>
+              Add First Question
+            </Button>
+          </ListItem>
+        ) : (
+          <Droppable droppableId={`droppable-survey-${surveyId}`} type="SURVEY">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {questions.map((question) => (
+                  <Question
+                    key={question.id}
+                    question={question}
+                    surveyId={surveyId}
+                  />
+                ))}
+                {provided.placeholder}
+                <OnClickOutside
+                  active={dropdown}
+                  handler={() => setDropdown(false)}
+                >
+                  <Button
                     css={css`
                       margin-top: 25px;
-                      svg {
-                        font-size: 15px;
-                        margin-bottom: 3.5px;
-                        margin-right: 5px;
-                      }
                     `}
+                    onClick={() => setDropdown(!dropdown)}
                   >
-                    <Dropdown.Toggle id="dropdown-basic">
-                      Add New Question
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handleCreateQuestion("check")}
-                      >
+                    Add New Question
+                  </Button>
+                  <Dropdown show={dropdown} setShow={setDropdown}>
+                    <ul
+                      css={css`
+                        padding: 8px 0px;
+                        background-color: #eaeaea;
+                        width: 250px;
+                        border-radius: 5px;
+                        margin-top: 10px;
+                        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+                        li {
+                          list-style-type: none;
+                          padding: 8px 25px;
+                          cursor: pointer;
+                          &:hover {
+                            background-color: rgba(0, 0, 0, 0.125);
+                          }
+                        }
+                        svg {
+                          margin-bottom: 3px;
+                          margin-right: 4px;
+                        }
+                      `}
+                    >
+                      <li onClick={() => handleCreateQuestion("check")}>
                         <FaListUl />
-                        Multi-Option
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleCreateQuestion("radio")}
-                      >
+                        <span>Multi-Option</span>
+                      </li>
+                      <li onClick={() => handleCreateQuestion("radio")}>
                         <FaRegCircle />
-                        One-Option
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleCreateQuestion("text")}
-                      >
+                        <span>One-Option</span>
+                      </li>
+                      <li onClick={() => handleCreateQuestion("text")}>
                         <FaKeyboard />
-                        Text
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
+                        <span>Text</span>
+                      </li>
+                    </ul>
                   </Dropdown>
-                </div>
-              )}
-            </Droppable>
-          )}
-        </div>
+                </OnClickOutside>
+              </div>
+            )}
+          </Droppable>
+        )}
       </DragDropContext>
     </ListGroup>
   );

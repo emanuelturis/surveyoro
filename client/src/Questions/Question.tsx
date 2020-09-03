@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useRef,
+  InputHTMLAttributes,
+  createRef,
+  useEffect,
+} from "react";
 import { IQuestion } from "../graphql-types";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
@@ -12,13 +18,17 @@ import {
   FaListUl,
 } from "react-icons/fa";
 import { ListGroup } from "react-bootstrap";
-import EditableText from "../Shared/EditableText/EditableText";
 import Answers from "./Answers";
 import {
   Draggable,
   DraggableProvided,
   DraggableStateSnapshot,
 } from "react-beautiful-dnd";
+import { Icon } from "../Shared/Icon";
+import UpdateFieldModal from "../Shared/UpdateFieldModal";
+import { Formik } from "formik";
+import { FormikForm, FormControl } from "../Shared/Form";
+import { ListItem } from "../Shared/ListItem";
 
 interface Props {
   question: IQuestion;
@@ -43,6 +53,8 @@ const UPDATE_QUESTION = gql`
 `;
 
 const Question: React.FC<Props> = ({ question, surveyId }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const [open, setOpen] = useState(false);
 
   const [updateQuestion] = useMutation(UPDATE_QUESTION);
@@ -112,107 +124,114 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
   };
 
   return (
-    <Draggable
-      key={question.id}
-      draggableId={question.id}
-      index={question.order}
-    >
-      {(provided) => (
-        <ListGroup.Item
-          {...provided.draggableProps}
-          ref={provided.innerRef}
-          css={css`
-            border: 1px solid rgba(0, 0, 0, 0.125) !important;
-            margin-top: 10px;
-          `}
-        >
-          <div>
-            <div className="d-flex justify-content-between">
-              <div className="d-flex align-items-center">
-                <FaCaretRight
-                  css={css`
-                    margin-bottom: 2px;
-                    margin-right: 5px;
-                    transform: ${open ? `rotate(90deg)` : `rotate(0deg)`};
-                    cursor: pointer;
-                    opacity: 0.8;
-                    &:hover {
-                      opacity: 1;
-                    }
-                  `}
-                  onClick={() => setOpen(!open)}
-                />
+    <div key={question.id}>
+      <UpdateFieldModal
+        type="Question"
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        handleSubmit={(text: string) => {
+          setShowModal(false);
+          updateQuestion({
+            variables: {
+              id: question.id,
+              surveyId,
+              text,
+            },
+          });
+        }}
+        initialValue={question.text}
+      />
+      <Draggable
+        key={question.id}
+        draggableId={question.id}
+        index={question.order}
+      >
+        {(provided) => (
+          <ListItem {...provided.draggableProps} ref={provided.innerRef}>
+            <div>
+              <div className="d-flex justify-content-between">
+                <div className="d-flex align-items-center">
+                  <FaCaretRight
+                    css={css`
+                      margin-bottom: 2px;
+                      transform: ${open ? `rotate(90deg)` : `rotate(0deg)`};
+                      cursor: pointer;
+                      opacity: 0.8;
+                      &:hover {
+                        opacity: 1;
+                      }
+                    `}
+                    onClick={() => setOpen(!open)}
+                  />
+                  <div
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                      svg {
+                        margin-right: 12px;
+                        margin-left: 12px;
+                        margin-bottom: 2px;
+                        flex-shrink: 0;
+                      }
+                      p {
+                        margin: 0;
+                        padding: 0;
+                      }
+                    `}
+                  >
+                    {questionsIcons[question.type]}
+                    <p>{question.text}</p>
+                  </div>
+                </div>
                 <div
                   css={css`
-                    svg {
-                      margin-right: 5px;
-                      margin-bottom: 4px;
+                    display: flex;
+                    align-items: center;
+                    ${Icon} {
+                      margin-left: 8px;
                     }
                   `}
                 >
-                  {questionsIcons[question.type]}
+                  <Icon onClick={() => setShowModal(true)}>
+                    <FaPencilAlt />
+                  </Icon>
+                  <Icon onClick={() => deleteQuestion()}>
+                    <FaTrash className="text-danger" />
+                  </Icon>
+                  <Icon {...provided.dragHandleProps}>
+                    <FaGripLines />
+                  </Icon>
                 </div>
-                <EditableText
-                  text={question.text}
-                  updateText={(text: string) => {
-                    updateQuestion({
-                      variables: {
-                        id: question.id,
-                        surveyId,
-                        text,
-                      },
-                    });
-                  }}
-                />
               </div>
-              <div
-                css={css`
-                  svg {
-                    font-size: 15px;
-                    opacity: 0.8;
-                    margin-left: 15px;
-                    &:hover {
-                      opacity: 1;
-                    }
-                  }
-                `}
-              >
-                <FaTrash
-                  css={css`
-                    cursor: pointer;
-                  `}
-                  className="text-danger"
-                  onClick={() => deleteQuestion()}
-                />
-                <span {...provided.dragHandleProps}>
-                  <FaGripLines />
-                </span>
-              </div>
-            </div>
-            {open && (
-              <div>
-                <hr />
-                {question.type !== "text" ? (
-                  <Answers
-                    answers={question.answers}
-                    questionId={question.id}
-                    surveyId={surveyId}
+              {open && (
+                <div>
+                  <hr
+                    css={css`
+                      border-top: 2px solid #eaeaea;
+                    `}
                   />
-                ) : (
-                  <div>
-                    <h5>Question is a {question.type}.</h5>
-                    <p className="text-secondary">
-                      The question will have a text input, allowing any value to
-                      be inserted.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </ListGroup.Item>
-      )}
-    </Draggable>
+                  {question.type !== "text" ? (
+                    <Answers
+                      answers={question.answers}
+                      questionId={question.id}
+                      surveyId={surveyId}
+                    />
+                  ) : (
+                    <div>
+                      <h5>Question is a {question.type}.</h5>
+                      <p className="text-secondary">
+                        The question will have a text input, allowing any value
+                        to be inserted.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </ListItem>
+        )}
+      </Draggable>
+    </div>
   );
 };
 

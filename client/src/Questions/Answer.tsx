@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { IAnswer } from "../graphql-types";
 import EditableText from "../Shared/EditableText/EditableText";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
-import { FaTrash, FaGripLines } from "react-icons/fa";
-import { Draggable } from "react-beautiful-dnd";
+import { FaTrash, FaGripLines, FaPencilAlt } from "react-icons/fa";
+import {
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot,
+} from "react-beautiful-dnd";
+import { Icon } from "../Shared/Icon";
+import styled from "@emotion/styled";
+import UpdateFieldModal from "../Shared/UpdateFieldModal";
 
 interface Props {
   answer: IAnswer;
@@ -39,6 +46,8 @@ const DELETE_ANSWER = gql`
 `;
 
 const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const [updateAnswer] = useMutation(UPDATE_ANSWER);
   const [deleteAnswer] = useMutation(DELETE_ANSWER, {
     variables: {
@@ -89,64 +98,78 @@ const Answer: React.FC<Props> = ({ answer, questionId, surveyId }) => {
     },
   });
 
+  const getItemStyle = (
+    provided: DraggableProvided,
+    snapshot: DraggableStateSnapshot
+  ) => ({
+    ...provided.draggableProps.style,
+    boxShadow: snapshot.isDragging ? "0px 5px 10px rgba(0, 0, 0, 0.075)" : "",
+  });
+
   return (
-    <Draggable key={answer.id} draggableId={answer.id} index={answer.order}>
-      {(provided) => (
-        <div
-          css={css`
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0px;
-          `}
-          {...provided.draggableProps}
-          ref={provided.innerRef}
-        >
-          <EditableText
-            text={answer.text}
-            updateText={(text: string) => {
-              updateAnswer({
-                variables: {
-                  id: answer.id,
-                  questionId,
-                  surveyId,
-                  text,
-                },
-              });
-            }}
-          />
+    <div>
+      <UpdateFieldModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        type="Answer"
+        handleSubmit={(text: string) => {
+          setShowModal(false);
+          updateAnswer({
+            variables: {
+              id: answer.id,
+              questionId,
+              surveyId,
+              text,
+            },
+          });
+        }}
+        initialValue={answer.text}
+      />
+      <Draggable key={answer.id} draggableId={answer.id} index={answer.order}>
+        {(provided, snapshot) => (
           <div
             css={css`
-              svg {
-                font-size: 15px;
-                opacity: 0.8;
-                margin-left: 15px;
-                &:hover {
-                  opacity: 1;
-                }
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 10px 15px;
+              background-color: #ffffff;
+              border-radius: 5px;
+              p {
+                margin: 0;
+              }
+              &:hover {
+                background-color: rgba(234, 234, 234, 0.25);
               }
             `}
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+            style={getItemStyle(provided, snapshot)}
           >
-            <FaTrash
+            <p>{answer.text}</p>
+            <div
               css={css`
-                font-size: 15px;
-                opacity: 0.8;
-                margin-left: 15px;
-                cursor: pointer;
-                &:hover {
-                  opacity: 1;
+                display: flex;
+                align-items: center;
+                ${Icon} {
+                  margin-left: 8px;
                 }
               `}
-              className="text-danger"
-              onClick={() => deleteAnswer()}
-            />
-            <span {...provided.dragHandleProps}>
-              <FaGripLines />
-            </span>
+            >
+              <Icon onClick={() => setShowModal(true)}>
+                <FaPencilAlt />
+              </Icon>
+              <Icon onClick={() => deleteAnswer()}>
+                <FaTrash className="text-danger" />
+              </Icon>
+              <Icon {...provided.dragHandleProps}>
+                <FaGripLines />
+              </Icon>
+            </div>
           </div>
-        </div>
-      )}
-    </Draggable>
+        )}
+      </Draggable>
+    </div>
   );
 };
 

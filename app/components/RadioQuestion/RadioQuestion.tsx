@@ -44,12 +44,13 @@ const RadioQuestion = ({
           if (!checked) {
             return;
           }
-          setStep(step + 1);
-          setSubmission({
-            questionId: question.id,
-            answerId: checked.id,
-            answerText: checked.text,
-          });
+          setSubmission([
+            {
+              questionId: question.id,
+              answerId: checked.id,
+              answerText: checked.text,
+            },
+          ]);
         }}
       >
         {step === steps ? "Finish Survey" : "Next Question"}

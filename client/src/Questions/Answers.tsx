@@ -1,10 +1,10 @@
 import React from "react";
 import { IAnswer } from "../graphql-types";
-import { Button } from "react-bootstrap";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
 import Answer from "./Answer";
 import { Droppable, DragDropContext, DropResult } from "react-beautiful-dnd";
+import { Button } from "../Shared/Button";
 
 interface Props {
   answers: IAnswer[];
@@ -168,7 +168,7 @@ const Answers: React.FC<Props> = ({ answers, questionId, surveyId }) => {
             <p className="text-secondary">
               Click below to add the first ansewer to this question.
             </p>
-            <Button size="sm" onClick={() => createAnswer()}>
+            <Button size="small" onClick={() => createAnswer()}>
               Add First Answer
             </Button>
           </div>
@@ -180,11 +180,7 @@ const Answers: React.FC<Props> = ({ answers, questionId, surveyId }) => {
             >
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  <div
-                    css={css`
-                      margin-bottom: 15px;
-                    `}
-                  >
+                  <div>
                     {answers.map((answer) => (
                       <Answer
                         answer={answer}
@@ -194,7 +190,13 @@ const Answers: React.FC<Props> = ({ answers, questionId, surveyId }) => {
                     ))}
                     {provided.placeholder}
                   </div>
-                  <Button size="sm" onClick={() => createAnswer()}>
+                  <Button
+                    css={css`
+                      margin: 15px 0px 10px 0px;
+                    `}
+                    size="small"
+                    onClick={() => createAnswer()}
+                  >
                     Add New Answer
                   </Button>
                 </div>

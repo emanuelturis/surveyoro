@@ -4,7 +4,6 @@ import { IQuestion } from "../../graphql-types";
 import { Formik, Field, Form as FormikForm, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { IActions } from "../Question/Question";
-import styled from "@emotion/styled";
 import { FormControl, SubmitButton } from "../Shared/Form";
 
 interface Props {
@@ -28,12 +27,13 @@ const TextQuestion = ({
         [question.id]: "",
       }}
       onSubmit={(values) => {
-        setStep(step + 1);
-        setSubmission({
-          questionId: question.id,
-          answerText: values[question.id],
-          answerId: null,
-        });
+        setSubmission([
+          {
+            questionId: question.id,
+            answerText: values[question.id],
+            answerId: null,
+          },
+        ]);
       }}
       validationSchema={textQuestionValidationSchema}
     >

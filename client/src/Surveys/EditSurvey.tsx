@@ -12,6 +12,10 @@ import EditableTitle from "../Shared/EditableTitle/EditableTitle";
 import Toggle from "react-toggle";
 import "./Toggle.css";
 import Questions from "../Questions";
+import { Icon } from "../Shared/Icon";
+import { Title } from "../Shared/Title";
+import BackToDashboard from "../Shared/BackToDashboard";
+import ReactTooltip from "react-tooltip";
 
 const SURVEY = gql`
   query Survey($id: ID!) {
@@ -74,36 +78,22 @@ const EditSurvey: React.FC = () => {
     <div>
       {data && (
         <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center">
-              <FaCaretLeft
-                css={css`
-                  margin-bottom: 8px;
-                  margin-right: 5px;
-                  font-size: 25px;
-                  opacity: 0.8;
-                  cursor: pointer;
-                  &:hover {
-                    opacity: 1;
-                  }
-                `}
-                onClick={() =>
-                  history.push(location.pathname.replace(`/${id}`, ""))
+          <BackToDashboard />
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              @media (max-width: 768px) {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                ${Title} {
+                  margin-top: 15px;
                 }
-              />
-              <EditableTitle
-                title={data.survey.name}
-                updateTitle={(name: string) =>
-                  updateSurvey({
-                    variables: {
-                      id,
-                      active: data.survey.active,
-                      name,
-                    },
-                  })
-                }
-              />
-            </div>
+              }
+            `}
+          >
+            <Title>{data.survey.name}</Title>
             <div className="d-flex align-items-center">
               <a
                 css={css`
@@ -116,27 +106,34 @@ const EditSurvey: React.FC = () => {
                 }
                 target="_blank"
               >
-                <FaExternalLinkAlt
-                  css={css`
-                    font-size: 12.5px;
-                    margin-bottom: 5px;
-                    margin-right: 10px;
-                    cursor: pointer;
-                    opacity: 0.8;
-                    &:hover {
-                      opacity: 1;
-                    }
-                  `}
-                />
+                <Icon>
+                  <FaExternalLinkAlt />
+                </Icon>
               </a>
+              <ReactTooltip
+                id="active"
+                delayShow={250}
+                backgroundColor="rgba(57, 62, 70, 1)"
+                textColor="rgba(238, 238, 238, 1)"
+                effect="solid"
+              >
+                If the survey doesn't have any answerable question it will also
+                be marked as draft.
+              </ReactTooltip>
               <span
                 css={css`
-                  margin-right: 5px;
+                  margin-left: 8px;
+                  margin-right: 8px;
                   font-weight: 500;
+                  @media (max-width: 768px) {
+                    font-size: 0.889em;
+                  }
                 `}
                 className="text-secondary"
+                data-tip="active"
+                data-for="active"
               >
-                Published
+                {data.survey.active ? "Published" : "Draft"}
               </span>
               <Toggle
                 checked={data.survey.active}

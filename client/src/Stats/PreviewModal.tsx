@@ -1,6 +1,7 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { ISubmission } from "../graphql-types";
+import { Button } from "../Shared/Button";
 
 interface Props {
   show: boolean;
@@ -30,7 +31,11 @@ const PreviewModal: React.FC<Props> = ({ show, handleClose, submissions }) => {
             ))}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => handleClose()}>
+            <Button
+              variant="cancel"
+              type="button"
+              onClick={() => handleClose()}
+            >
               Close
             </Button>
           </Modal.Footer>

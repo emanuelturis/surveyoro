@@ -17,6 +17,7 @@ import { Container } from "react-bootstrap";
 import { css } from "@emotion/core";
 import EditSurvey from "../Surveys/EditSurvey";
 import Stats from "../Stats";
+import { Global } from "@emotion/core";
 
 const USER = gql`
   query User {
@@ -39,11 +40,22 @@ function App() {
   if (data) {
     return (
       <div>
+        <Global
+          styles={css`
+            @media (max-width: 768px) {
+              p {
+                font-size: 0.889em;
+                word-break: break-all;
+              }
+            }
+          `}
+        />
         <Router>
           <Header />
           <Container
             css={css`
               margin-top: 25px;
+              margin-bottom: 25px;
             `}
           >
             <Switch>

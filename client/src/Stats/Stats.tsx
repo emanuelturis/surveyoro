@@ -12,6 +12,11 @@ import { Table, Alert, ListGroup } from "react-bootstrap";
 import { FaCaretLeft, FaEye } from "react-icons/fa";
 import { css } from "@emotion/core";
 import PreviewModal from "./PreviewModal";
+import { Title, SubTitle } from "../Shared/Title";
+import BackToDashboard from "../Shared/BackToDashboard";
+import { ListItem } from "../Shared/ListItem";
+import { Icon } from "../Shared/Icon";
+import ReactTooltip from "react-tooltip";
 
 const SUBMISSIONS = gql`
   query Submissions($surveyId: ID!) {
@@ -110,32 +115,16 @@ const Stats: React.FC = () => {
           show={show}
           handleClose={handleClose}
         />
-        <div className="d-flex align-items-center">
-          <FaCaretLeft
-            css={css`
-              margin-bottom: 8px;
-              margin-right: 5px;
-              font-size: 25px;
-              opacity: 0.8;
-              cursor: pointer;
-              &:hover {
-                opacity: 1;
-              }
-            `}
-            onClick={() =>
-              history.push(location.pathname.replace(`/${id}/stats`, ""))
-            }
-          />
-          <h1>{surveyData.survey.name}</h1>
-        </div>
+        <BackToDashboard />
+        <Title>{surveyData.survey.name}</Title>
         {data.submissions.length === 0 ? (
           <div>
-            <ListGroup.Item
+            <ListItem
               css={css`
-                margin-top: 10px;
+                margin-top: 25px;
               `}
             >
-              <h4>No Stats Yet.</h4>
+              <SubTitle>No Stats.</SubTitle>
               <p
                 css={css`
                   margin: 0;
@@ -143,48 +132,56 @@ const Stats: React.FC = () => {
               >
                 You'll see stats here once people start answering your survey...
               </p>
-            </ListGroup.Item>
+            </ListItem>
           </div>
         ) : (
-          <Table
-            bordered
+          <ListGroup
             css={css`
               margin-top: 15px;
             `}
           >
-            <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email Address</th>
-                <th>Submitted</th>
-                <th className="text-center">Preview</th>
-              </tr>
-            </thead>
-            <tbody>
-              {persons.map((personId) => (
-                <tr key={personId}>
-                  <td>{personsSubmissions[personId][0].person.firstName}</td>
-                  <td>{personsSubmissions[personId][0].person.lastName}</td>
-                  <td>{personsSubmissions[personId][0].person.email}</td>
-                  <td>
+            {persons.map((personId) => (
+              <ListItem key={personId}>
+                <div
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    p {
+                      margin: 10px 0px;
+                    }
+                  `}
+                >
+                  <ReactTooltip
+                    id={personId}
+                    backgroundColor="rgba(57, 62, 70, 1)"
+                    textColor="rgba(238, 238, 238, 1)"
+                    effect="solid"
+                  >
                     {getDate(personsSubmissions[personId][0].person.createdAt)}
-                  </td>
-                  <td className="text-center">
-                    <FaEye
-                      css={css`
-                        cursor: pointer;
-                      `}
-                      onClick={() => {
-                        setSubmissions(personsSubmissions[personId]);
-                        setShow(true);
-                      }}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                  </ReactTooltip>
+                  <div>
+                    <p>
+                      Name: {personsSubmissions[personId][0].person.firstName}{" "}
+                      {personsSubmissions[personId][0].person.lastName}
+                    </p>
+                    <p>Email: {personsSubmissions[personId][0].person.email}</p>
+                    <p></p>
+                  </div>
+                  <Icon
+                    data-tip={personId}
+                    data-for={personId}
+                    onClick={() => {
+                      setSubmissions(personsSubmissions[personId]);
+                      setShow(true);
+                    }}
+                  >
+                    <FaEye />
+                  </Icon>
+                </div>
+              </ListItem>
+            ))}
+          </ListGroup>
         )}
       </div>
     );

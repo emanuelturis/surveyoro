@@ -52,6 +52,12 @@ const Survey: React.FC = () => {
     }
   );
 
+  useEffect(() => {
+    if (submission.length !== 0) {
+      setStep((s) => s + 1);
+    }
+  }, [submission]);
+
   if (loading) {
     return null;
   }
@@ -76,8 +82,8 @@ const Survey: React.FC = () => {
     );
   }
 
-  const handleSetSubmisson = (data: object) => {
-    setSubmission((submission) => [...submission, data]);
+  const handleSetSubmission = (data: object[]) => {
+    setSubmission((submission) => [...submission, ...data]);
   };
 
   const questions = data.survey.questions
@@ -92,7 +98,7 @@ const Survey: React.FC = () => {
         step,
         steps: data.survey.questions.length,
         setStep,
-        setSubmission: handleSetSubmisson,
+        setSubmission: handleSetSubmission,
       })
     );
 
@@ -101,14 +107,32 @@ const Survey: React.FC = () => {
       step={step}
       steps={data.survey.questions.length}
       setStep={setStep}
-      setSubmission={handleSetSubmisson}
+      setSubmission={handleSetSubmission}
     />,
     ...questions,
     <Finished
       submission={submission}
       steps={data.survey.questions.length + 1}
+      index={questions.length + 1}
+      step={step}
     />,
   ];
+
+  if (questions.length === 0) {
+    return (
+      <div
+        css={css`
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-weight: bold;
+        `}
+      >
+        <h1>Survey Doesn't Exist.</h1>
+      </div>
+    );
+  }
 
   return (
     <Container
