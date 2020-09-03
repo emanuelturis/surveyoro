@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
+import { Formik } from "formik";
 import { gql, useMutation } from "@apollo/client";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { css } from "@emotion/core";
 import * as yup from "yup";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, Link } from "react-router-dom";
+import { FormikForm, FormControl, FormError } from "../Shared/Form";
+import { Button } from "../Shared/Button";
 
 const REGISTER = gql`
   mutation Register($input: RegisterInput!) {
@@ -31,9 +33,14 @@ const Register: React.FC = () => {
 
   return (
     <div
-      className="card"
       css={css`
-        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 50px;
+        @media (max-width: 768px) {
+          padding: 0;
+        }
       `}
     >
       <div className="card-body">
@@ -70,49 +77,41 @@ const Register: React.FC = () => {
               {error ? <Alert variant="danger">{error}</Alert> : null}
               <FormikForm>
                 <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="text"
                   name="firstName"
                   placeholder="Enter your first name..."
                 />
-                <ErrorMessage
+                <FormError
                   name="firstName"
                   component="p"
                   className="text-danger"
                 />
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="text"
                   name="lastName"
                   placeholder="Enter your last name..."
                 />
-                <ErrorMessage
+                <FormError
                   name="lastName"
                   component="p"
                   className="text-danger"
                 />
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="text"
                   name="email"
                   placeholder="Enter your email address..."
                 />
-                <ErrorMessage
-                  name="email"
-                  component="p"
-                  className="text-danger"
-                />
+                <FormError name="email" component="p" className="text-danger" />
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="password"
                   name="password"
                   placeholder="Enter your password..."
                 />
-                <ErrorMessage
+                <FormError
                   name="password"
                   component="p"
                   className="text-danger"
@@ -125,6 +124,24 @@ const Register: React.FC = () => {
                 >
                   Register
                 </Button>
+                <div
+                  css={css`
+                    margin-top: 15px;
+                  `}
+                >
+                  <Link to="/login">
+                    Got an existing account? Click here to login.
+                  </Link>
+                  <p
+                    css={css`
+                      margin-top: 15px;
+                    `}
+                  >
+                    <b>Notice: </b>
+                    Surveyoro is a demonstration application. Your data can be
+                    erased at any time.
+                  </p>
+                </div>
               </FormikForm>
             </div>
           )}

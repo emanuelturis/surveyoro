@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Formik } from "formik";
+import { Form, Alert } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import { css } from "@emotion/core";
 import * as yup from "yup";
+import { FormikForm, FormControl, FormError } from "../Shared/Form";
+import { Button } from "../Shared/Button";
+import { Link } from "react-router-dom";
 
 const LOGIN = gql`
   mutation Login($input: LoginInput!) {
@@ -52,9 +55,14 @@ const Login: React.FC = () => {
 
   return (
     <div
-      className="card"
       css={css`
-        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 50px;
+        @media (max-width: 768px) {
+          padding: 0;
+        }
       `}
     >
       <div className="card-body">
@@ -84,25 +92,19 @@ const Login: React.FC = () => {
               {error ? <Alert variant="danger">{error}</Alert> : null}
               <FormikForm>
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="email"
                   name="email"
                   placeholder="Enter your email address..."
                 />
-                <ErrorMessage
-                  name="email"
-                  component="p"
-                  className="text-danger"
-                />
+                <FormError name="email" component="p" className="text-danger" />
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  as={Field}
+                <FormControl
                   type="password"
                   name="password"
                   placeholder="Enter your password..."
                 />
-                <ErrorMessage
+                <FormError
                   name="password"
                   component="p"
                   className="text-danger"
@@ -116,6 +118,24 @@ const Login: React.FC = () => {
                   Login
                 </Button>
               </FormikForm>
+              <div
+                css={css`
+                  margin-top: 15px;
+                `}
+              >
+                <Link to="/register">
+                  Don't have an account yet? Click here to register.
+                </Link>
+                <p
+                  css={css`
+                    margin-top: 15px;
+                  `}
+                >
+                  <b>Notice: </b>
+                  Surveyoro is a demonstration application. Your data can be
+                  erased at any time.
+                </p>
+              </div>
             </div>
           )}
         </Formik>

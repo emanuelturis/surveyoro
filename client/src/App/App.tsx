@@ -13,11 +13,12 @@ import Settings from "../Settings";
 import { gql, useQuery } from "@apollo/client";
 import Login from "../Login";
 import Register from "../Register";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { css } from "@emotion/core";
 import EditSurvey from "../Surveys/EditSurvey";
 import Stats from "../Stats";
 import { Global } from "@emotion/core";
+import { Title } from "../Shared/Title";
 
 const USER = gql`
   query User {
@@ -74,7 +75,18 @@ function App() {
   }
 
   return (
-    <Container>
+    <div
+      css={css`
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100vh;
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      `}
+    >
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
@@ -84,7 +96,28 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </Container>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #eaeaea;
+          height: 100vh;
+          text-align: center;
+          @media (max-width: 768px) {
+            display: none;
+          }
+        `}
+      >
+        <div>
+          <Title>Get Accurate Feedback.</Title>
+          <p>
+            All the tools you need to get feedback from your leads, fans and
+            customers.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
