@@ -36,6 +36,7 @@ const RadioQuestion = ({
             checked={checked === answer}
             onClick={() => setChecked(answer)}
             label={answer.text}
+            name={answer.id}
           />
         </div>
       ))}

@@ -114,7 +114,7 @@ const Survey: React.FC = () => {
     <Container
       fluid
       css={css`
-        background-color: #eaeaea;
+        background-color: #ffffff;
       `}
     >
       {data && (

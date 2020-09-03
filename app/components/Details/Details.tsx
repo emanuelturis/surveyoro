@@ -2,7 +2,12 @@ import React from "react";
 import { Button, Form } from "react-bootstrap";
 import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { FormControl, FormikForm, SubmitButton } from "../Shared/Form";
+import {
+  FormControl,
+  FormikForm,
+  SubmitButton,
+  FormError,
+} from "../Shared/Form";
 
 interface Props {
   step: number;
@@ -39,25 +44,21 @@ const Details: React.FC<Props> = ({ step, steps, setStep, setSubmission }) => {
             name="firstName"
             placeholder="Enter your first name..."
           />
-          <ErrorMessage
-            component="p"
-            name="firstName"
-            className="text-danger"
-          />
+          <FormError component="p" name="firstName" className="text-danger" />
           <Form.Label>Last Name</Form.Label>
           <FormControl
             type="text"
             name="lastName"
             placeholder="Enter your last name..."
           />
-          <ErrorMessage component="p" name="lastName" className="text-danger" />
+          <FormError component="p" name="lastName" className="text-danger" />
           <Form.Label>Email Address</Form.Label>
           <FormControl
             type="text"
             name="email"
             placeholder="Enter your email address..."
           />
-          <ErrorMessage component="p" name="email" className="text-danger" />
+          <FormError component="p" name="email" className="text-danger" />
           <SubmitButton type="submit">Start Survey</SubmitButton>
         </FormikForm>
       )}
