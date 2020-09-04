@@ -115,6 +115,15 @@ function App() {
             All the tools you need to get feedback from your leads, fans and
             customers.
           </p>
+          <img
+            src="/surveyoro.png"
+            alt=""
+            css={css`
+              width: 60%;
+              box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+              border-radius: 5px;
+            `}
+          />
         </div>
       </div>
     </div>
