@@ -10,6 +10,9 @@ import bcrypt from "bcrypt";
 import { createToken } from "../utils/auth";
 import { Survey } from "../db/models/Survey";
 import joi from "@hapi/joi";
+import { generateToken } from "../utils/generateToken";
+import nodemailer from "nodemailer";
+import nodemailerSendgrid from "nodemailer-sendgrid";
 
 export const typeDef = gql`
   type User {
@@ -89,14 +92,68 @@ export const resolvers = {
       const plainTextPassword = password;
       const hashedPassword = await bcrypt.hash(plainTextPassword, saltRounds);
 
-      await User.query()
+      const token = await generateToken();
+
+      const user = await User.query()
         .insert({
           firstName,
           lastName,
           email,
           password: hashedPassword,
+          confirmationToken: token,
         })
-        .returning("id");
+        .returning("*");
+
+      if (process.env.NODE_ENV !== "production") {
+        const transporter = nodemailer.createTransport({
+          host: "smtp.mailtrap.io",
+          port: 2525,
+          auth: {
+            user: "7f104d587e7ef8",
+            pass: "d31b2036ed47d8",
+          },
+        });
+
+        await transporter.sendMail({
+          from: '"Surveyoro 👻" <support@surveyoro.com>',
+          to: user.email,
+          subject: "Confirm Your Surveyoro Account",
+          text: `
+        You have recieved this message because you created a Surveyoro account with this email.
+        Click the link below to confirm your account and start using Surveyoro.
+        Confirm Account
+          `,
+          html: `
+        <h3>You have recieved this message because you created a Surveyoro account with this email.</h3>
+        <p>Click the link below to confirm your account and start using Surveyoro.</p>
+        <a href="http://localhost:9000/confirmation/${user.confirmationToken}">Confirm Account</a>
+          `,
+        });
+      }
+
+      if (process.env.NODE_ENV === "production") {
+        const transporter = nodemailer.createTransport(
+          nodemailerSendgrid({
+            apiKey: process.env.SENDGRID_API_KEY || "",
+          })
+        );
+
+        await transporter.sendMail({
+          from: '"Surveyoro 👻" <support@surveyoro.com>',
+          to: user.email,
+          subject: "Confirm Your Surveyoro Account",
+          text: `
+        You have recieved this message because you created a Surveyoro account with this email.
+        Click the link below to confirm your account and start using Surveyoro.
+        Confirm Account
+          `,
+          html: `
+        <h3>You have recieved this message because you created a Surveyoro account with this email.</h3>
+        <p>Click the link below to confirm your account and start using Surveyoro.</p>
+        <a href="http://localhost:9000"/confirmation/${user.confirmationToken}">Confirm Account</a>
+          `,
+        });
+      }
 
       return true;
     },
@@ -125,6 +182,12 @@ export const resolvers = {
 
       if (!validPassword) {
         throw new AuthenticationError("Incorrect password.");
+      }
+
+      if (!user.isConfirmed) {
+        throw new AuthenticationError(
+          "Please check your email for a confirmation link to activate your account and start using Surveyoro."
+        );
       }
 
       const token = createToken(user);

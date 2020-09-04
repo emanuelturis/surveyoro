@@ -6,6 +6,8 @@ import knex from "./db/knex";
 import { applyMiddleware } from "graphql-middleware";
 import permissions from "./schema/permissions";
 import cors from "cors";
+import { User } from "./db/models/User";
+import joi from "@hapi/joi";
 
 Model.knex(knex);
 
@@ -28,6 +30,32 @@ app.use(
     ],
   })
 );
+
+app.get("/confirmation/:token", async (req, res) => {
+  try {
+    const confirmationToken = req.params.token;
+
+    await joi.string().length(128).validateAsync(confirmationToken);
+
+    await User.query()
+      .update({
+        confirmationToken: null,
+        isConfirmed: true,
+      })
+      .where({
+        confirmationToken,
+      })
+      .throwIfNotFound();
+  } catch {
+    return res.sendStatus(401);
+  }
+
+  return res.redirect(
+    process.env.CLIENT_URL
+      ? `${process.env.CLIENT_URL}/login`
+      : "http://localhost:3000/login"
+  );
+});
 
 server.applyMiddleware({ app, cors: false });
 

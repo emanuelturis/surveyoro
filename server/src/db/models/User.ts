@@ -12,6 +12,8 @@ export class User extends Model {
   lastName!: string;
   email!: string;
   password!: string;
+  confirmationToken?: string | null;
+  isConfirmed!: boolean;
 
   surveys!: Survey[];
 
