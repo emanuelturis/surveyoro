@@ -115,7 +115,7 @@ export const resolvers = {
         });
 
         await transporter.sendMail({
-          from: '"Surveyoro 👻" <support@surveyoro.com>',
+          from: '"Surveyoro" <support@surveyoro.com>',
           to: user.email,
           subject: "Confirm Your Surveyoro Account",
           text: `
@@ -139,7 +139,7 @@ export const resolvers = {
         );
 
         await transporter.sendMail({
-          from: '"Surveyoro 👻" <support@surveyoro.com>',
+          from: '"Surveyoro" <support@surveyoro.com>',
           to: user.email,
           subject: "Confirm Your Surveyoro Account",
           text: `
