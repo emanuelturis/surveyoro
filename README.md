@@ -1,4 +1,4 @@
-## surveyoro
+## Surveyoro
 
 ### Get Accurate Feedback. All the tools you need to get feedback from your leads, fans and customers.
 
