@@ -9,4 +9,14 @@ Features implemented:
 * Drag and drop re-ordering of questions and answers with server syncing.
 * Server side rendering of surveys website for SEO benefits.
 
+Technologies:
+* React
+* Node.js
+* GraphQL
+* Apollo
+* Next.js
+* Docker
+* Dokku
+* Ubuntu
+
 <https://surveyoro.com/>
