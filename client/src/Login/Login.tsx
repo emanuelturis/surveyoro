@@ -16,6 +16,11 @@ const LOGIN = gql`
         firstName
         lastName
         email
+        surveys {
+          id
+          name
+          active
+        }
       }
       token
     }

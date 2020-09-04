@@ -172,7 +172,9 @@ export const resolvers = {
         throw error;
       }
 
-      const user = await User.query().findOne({ email });
+      const user = await User.query()
+        .findOne({ email })
+        .withGraphFetched("surveys");
 
       if (!user) {
         throw new AuthenticationError("Email address not found.");
