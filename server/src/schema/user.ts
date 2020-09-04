@@ -150,7 +150,7 @@ export const resolvers = {
           html: `
         <h3>You have recieved this message because you created a Surveyoro account with this email.</h3>
         <p>Click the link below to confirm your account and start using Surveyoro.</p>
-        <a href="http://localhost:9000"/confirmation/${user.confirmationToken}">Confirm Account</a>
+        <a href="https://api.surveyoro.com/confirmation/${user.confirmationToken}">Confirm Account</a>
           `,
         });
       }
