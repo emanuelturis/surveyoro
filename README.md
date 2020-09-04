@@ -18,5 +18,3 @@ Technologies:
 * Docker
 * Dokku
 * Ubuntu
-
-<https://surveyoro.com/>
