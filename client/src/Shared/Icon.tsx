@@ -11,7 +11,7 @@ export const Icon = styled.div`
     opacity: 1;
   }
   svg {
-    color: #183642;
+    color: #313d5a;
     display: block;
     margin: auto;
     font-size: 15px;
