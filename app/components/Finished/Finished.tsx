@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 
 interface Props {
   submission: Array<object>;
-  steps: number;
-  step: number;
-  index: number;
 }
 
 const ADD_SUBMISSION = gql`
@@ -19,7 +16,7 @@ const ADD_SUBMISSION = gql`
   }
 `;
 
-const Finished: React.FC<Props> = ({ submission, index, steps, step }) => {
+const Finished: React.FC<Props> = ({ submission }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const router = useRouter();

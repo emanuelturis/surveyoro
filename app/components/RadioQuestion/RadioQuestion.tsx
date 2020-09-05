@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IQuestion } from "../../graphql-types";
 import { IActions } from "../Question/Question";
 import { FormRadio, SubmitButton } from "../Shared/Form";

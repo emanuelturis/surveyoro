@@ -96,7 +96,11 @@ const Survey: React.FC = () => {
     .map((question) =>
       Question(question, {
         step,
-        steps: data.survey.questions.length,
+        steps: data.survey.questions.filter((question) =>
+          question.type !== "text" && question.answers.length === 0
+            ? false
+            : true
+        ).length,
         setStep,
         setSubmission: handleSetSubmission,
       })
@@ -105,17 +109,18 @@ const Survey: React.FC = () => {
   const steps = [
     <Details
       step={step}
-      steps={data.survey.questions.length}
+      steps={
+        data.survey.questions.filter((question) =>
+          question.type !== "text" && question.answers.length === 0
+            ? false
+            : true
+        ).length
+      }
       setStep={setStep}
       setSubmission={handleSetSubmission}
     />,
     ...questions,
-    <Finished
-      submission={submission}
-      steps={data.survey.questions.length + 1}
-      index={questions.length + 1}
-      step={step}
-    />,
+    <Finished submission={submission} />,
   ];
 
   if (questions.length === 0) {
