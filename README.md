@@ -15,6 +15,7 @@ Technologies:
 * GraphQL
 * Apollo
 * Next.js
+* PostgreSQL
 * Docker
 * Dokku
 * Ubuntu
