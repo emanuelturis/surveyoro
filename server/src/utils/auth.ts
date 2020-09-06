@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../db/models/User";
 
-const secret = "surveyoro";
+const secret = process.env.SECRET || "surveyoro";
 
 interface IUser {
   id: string;
