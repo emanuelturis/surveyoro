@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  InputHTMLAttributes,
-  createRef,
-  useEffect,
-} from "react";
+import React, { useState } from "react";
 import { IQuestion } from "../graphql-types";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
@@ -17,17 +11,10 @@ import {
   FaRegCircle,
   FaListUl,
 } from "react-icons/fa";
-import { ListGroup } from "react-bootstrap";
 import Answers from "./Answers";
-import {
-  Draggable,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 import { Icon } from "../Shared/Icon";
 import UpdateFieldModal from "../Shared/UpdateFieldModal";
-import { Formik } from "formik";
-import { FormikForm, FormControl } from "../Shared/Form";
 import { ListItem } from "../Shared/ListItem";
 
 interface Props {
@@ -124,7 +111,7 @@ const Question: React.FC<Props> = ({ question, surveyId }) => {
   };
 
   return (
-    <div key={question.id}>
+    <div>
       <UpdateFieldModal
         type="Question"
         show={showModal}

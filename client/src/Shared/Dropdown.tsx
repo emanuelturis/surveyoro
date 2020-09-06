@@ -1,5 +1,4 @@
 import React from "react";
-import OnClickOutside from "./OnClickOutside";
 
 interface Props {
   show: boolean;

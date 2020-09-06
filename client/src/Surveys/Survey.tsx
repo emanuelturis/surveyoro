@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ISurvey } from "../graphql-types";
-import { ListGroup } from "react-bootstrap";
 import { FaTrash, FaPencilAlt, FaChartLine } from "react-icons/fa";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";

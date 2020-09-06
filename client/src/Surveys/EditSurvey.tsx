@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { ISurvey, IQuerySurveyArgs } from "../graphql-types";
-import {
-  FaCaretLeft,
-  FaWindowMaximize,
-  FaExternalLinkAlt,
-} from "react-icons/fa";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { css } from "@emotion/core";
-import EditableTitle from "../Shared/EditableTitle/EditableTitle";
 import Toggle from "react-toggle";
 import "./Toggle.css";
 import Questions from "../Questions";
@@ -54,8 +49,6 @@ interface ISurveyData {
 }
 
 const EditSurvey: React.FC = () => {
-  const history = useHistory();
-  const location = useLocation();
   const { id } = useParams();
 
   const [showModal, setShowModal] = useState(false);
@@ -142,6 +135,7 @@ const EditSurvey: React.FC = () => {
                     : `http://localhost:3001/${id}`
                 }
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Icon>
                   <FaExternalLinkAlt />
@@ -173,7 +167,7 @@ const EditSurvey: React.FC = () => {
                 {data.survey.active ? "Published" : "Draft"}
               </span>
               <Toggle
-                checked={data.survey.active}
+                defaultChecked={data.survey.active}
                 onClick={() => {
                   updateSurvey({
                     variables: {

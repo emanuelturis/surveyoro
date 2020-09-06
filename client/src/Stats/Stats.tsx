@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   ISubmission,
   IQuerySubmissionsArgs,
@@ -8,8 +8,8 @@ import {
   IQuerySurveyArgs,
 } from "../graphql-types";
 import groupBy from "lodash/groupBy";
-import { Table, Alert, ListGroup } from "react-bootstrap";
-import { FaCaretLeft, FaEye } from "react-icons/fa";
+import { ListGroup } from "react-bootstrap";
+import { FaEye } from "react-icons/fa";
 import { css } from "@emotion/core";
 import PreviewModal from "./PreviewModal";
 import { Title, SubTitle } from "../Shared/Title";
@@ -66,11 +66,8 @@ interface ISurveyData {
 
 const Stats: React.FC = () => {
   const { id } = useParams();
-  const history = useHistory();
-  const location = useLocation();
 
   const [show, setShow] = useState(false);
-  const handleOpen = () => setShow(true);
   const handleClose = () => setShow(false);
 
   const [submissions, setSubmissions] = useState<ISubmission[] | null>(null);

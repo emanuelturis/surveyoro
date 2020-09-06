@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ISurvey } from "../graphql-types";
-import { ListGroup, Alert } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { Button } from "../Shared/Button";
 import { css } from "@emotion/core";
 import CreateSurveyModal from "./CreateSurveyModal";

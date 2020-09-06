@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { IAnswer } from "../graphql-types";
-import EditableText from "../Shared/EditableText/EditableText";
 import { css } from "@emotion/core";
 import { gql, useMutation } from "@apollo/client";
 import { FaTrash, FaGripLines, FaPencilAlt } from "react-icons/fa";

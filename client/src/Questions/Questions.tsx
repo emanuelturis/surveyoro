@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { IQuestion } from "../graphql-types";
 import Question from "./Question";
 import { ListGroup } from "react-bootstrap";

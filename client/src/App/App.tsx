@@ -7,13 +7,12 @@ import {
   Redirect,
 } from "react-router-dom";
 import Header from "../Header";
-import Dashboard from "../Dashboard";
 import Surveys from "../Surveys";
 import Settings from "../Settings";
 import { gql, useQuery } from "@apollo/client";
 import Login from "../Login";
 import Register from "../Register";
-import { Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { css } from "@emotion/core";
 import EditSurvey from "../Surveys/EditSurvey";
 import Stats from "../Stats";

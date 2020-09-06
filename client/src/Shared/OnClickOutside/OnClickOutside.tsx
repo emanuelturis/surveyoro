@@ -22,7 +22,7 @@ const OnClickOutside: React.FC<Props> = ({ children, handler, active }) => {
       document.removeEventListener("mousedown", listener);
       document.removeEventListener("touchstart", listener);
     };
-  }, [ref, handler]);
+  }, [ref, handler, active]);
 
   return <div ref={ref}>{children}</div>;
 };

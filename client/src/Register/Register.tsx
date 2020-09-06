@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Form, Alert } from "react-bootstrap";
 import { css } from "@emotion/core";
 import * as yup from "yup";
-import { Redirect, useHistory, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { FormikForm, FormControl, FormError } from "../Shared/Form";
 import { Button } from "../Shared/Button";
 
