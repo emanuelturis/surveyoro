@@ -1,6 +1,6 @@
 ## Surveyoro
 
-### Get Accurate Feedback. All the tools you need to get feedback from your leads, fans and customers.
+### All the tools you need to get feedback from your leads, fans and customers.
 
 ![alt text](https://github.com/emanuelturis/surveyoro/blob/master/screenshot.png?raw=true)
 
